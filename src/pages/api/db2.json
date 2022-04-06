@@ -1,0 +1,74 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "title": "Event 1",
+      "description": "Description 1",
+      "category": "sports",
+      "date": "April 25"
+    },
+    {
+      "id": 2,
+      "title": "Event 2",
+      "description": "Description 2",
+      "category": "technology",
+      "date": "May 25"
+    },
+    {
+      "id": 3,
+      "title": "Event 3",
+      "description": "Description 3",
+      "category": "food",
+      "date": "June 25"
+    },
+    {
+      "id": 4,
+      "title": "Event 4",
+      "description": "Description 4",
+      "category": "technology",
+      "date": "January 12"
+    },
+    {
+      "id": 5,
+      "title": "Event 5",
+      "description": "Description 5",
+      "category": "hobby",
+      "date": "February 3"
+    },
+    {
+      "id": 6,
+      "title": "Event 6",
+      "description": "Description 6",
+      "category": "sports",
+      "date": "July 9"
+    },
+    {
+      "id": 7,
+      "title": "Event 7",
+      "description": "Description 7",
+      "category": "business",
+      "date": "November 3"
+    },
+    {
+      "id": 8,
+      "title": "Event 8",
+      "description": "Description 8",
+      "category": "hobby",
+      "date": "April 3"
+    },
+    {
+      "id": 9,
+      "title": "Event 9",
+      "description": "Description 9",
+      "category": "technology",
+      "date": "March 3"
+    },
+    {
+      "id": 10,
+      "title": "Event 10",
+      "description": "Description 10",
+      "category": "sports",
+      "date": "December 12"
+    }
+  ]
+}
