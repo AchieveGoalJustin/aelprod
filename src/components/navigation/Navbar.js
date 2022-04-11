@@ -20,11 +20,13 @@ const Navbar = ({ perm, username }) => {
   const user = [
     {
       text: "プロフィール",
-      url: "#"
+      url: "#",
+      key: 1
     },
     {
       text: "ダッシュボード",
-      url: "#"
+      url: "#",
+      key: 2
     },
   ];
 

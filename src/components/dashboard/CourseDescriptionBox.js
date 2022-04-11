@@ -13,13 +13,12 @@ import {
   Divider,
   Flex,
   VStack,
-  Icon,
 } from "@chakra-ui/react";
 
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 
 const CourseDescriptionBox = ({ content }) => {
-  const { currentCourse, courseList } = useContext(CourseContext);
+  const { currentCourse } = useContext(CourseContext);
 
   const course = currentCourse;
 

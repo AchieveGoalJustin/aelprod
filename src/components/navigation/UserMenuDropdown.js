@@ -39,7 +39,11 @@ const UserMenuDropdown = ({ menuprops, username }) => {
         </Flex>
       </MenuButton>
       <MenuList>
-        {menuprops.map(item => <MenuItem><Link href={item.url}>{item.text}</Link></MenuItem>)}
+        {menuprops.map((item) => (
+          <MenuItem key={item.key}>
+            <Link href={item.url}>{item.text}</Link>
+          </MenuItem>
+        ))}
         {/* <MenuItem>
           <Link href={menuprops.url1}>{menuprops.text1}</Link>
         </MenuItem>
