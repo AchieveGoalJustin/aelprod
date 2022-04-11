@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import CourseContext from "../context/CourseContext";
 import VideoContext from "../context/VideoContext";
 import {
@@ -17,12 +17,11 @@ import {
   Image,
   Box,
   Heading,
-  Link,
 } from "@chakra-ui/react";
 import VideoCard from "./VideoCard";
 
 const VideoModal = ({ video }) => {
-  const { currentVideo, setCurrentVideo } = useContext(VideoContext);
+  const { setCurrentVideo } = useContext(VideoContext);
   const { setViewMode } = useContext(CourseContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -49,9 +48,7 @@ const VideoModal = ({ video }) => {
               />
               <Container>
                 <Heading my={2}>レッスン内容</Heading>
-                <Text>
-                  {video.longDesc}
-                </Text>
+                <Text>{video.longDesc}</Text>
               </Container>
             </Flex>
           </ModalBody>

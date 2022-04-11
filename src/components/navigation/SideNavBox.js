@@ -1,7 +1,6 @@
 import React from "react";
 
 import { Box, Button, Text, Flex, Icon } from "@chakra-ui/react";
-import { CopyIcon, InfoIcon } from "@chakra-ui/icons";
 
 import { useContext } from "react";
 

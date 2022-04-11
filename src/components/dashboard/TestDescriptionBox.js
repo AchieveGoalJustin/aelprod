@@ -1,5 +1,4 @@
 import React from "react";
-import InfoBox from "./InfoBox";
 
 import CourseContext from "../../context/CourseContext";
 
@@ -10,7 +9,6 @@ import { Text, Heading, Box, Divider, Flex } from "@chakra-ui/react";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 
 const TestDescriptionBox = ({ content }) => {
-    
   const { currentCourse } = useContext(CourseContext);
 
   const getCourse = (content, currentCourse) => {

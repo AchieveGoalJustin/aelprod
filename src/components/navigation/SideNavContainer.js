@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Box, Button, Text, Flex } from "@chakra-ui/react";
-import { CopyIcon, InfoIcon, EditIcon } from "@chakra-ui/icons";
+import { Flex } from "@chakra-ui/react";
+import { CopyIcon, EditIcon } from "@chakra-ui/icons";
 
 import SideNavBox from "./SideNavBox";
 
@@ -28,15 +28,6 @@ const SideNavContainer = ({ content }) => {
   const testLinks = extractTests(content);
 
   const boxData = [
-    // {
-    //   key: "1",
-    //   title: "プロフィール",
-    //   icon: InfoIcon,
-    //   links: [
-    //     { key: "1", text: "アカウント情報", link: "#" },
-    //     { key: "2", text: "アカウント設定", link: "#" },
-    //   ],
-    // },
     {
       key: "2",
       title: "テスト一覧",

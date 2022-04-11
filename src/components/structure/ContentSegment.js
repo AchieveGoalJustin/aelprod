@@ -11,10 +11,20 @@ import { Box, Grid, GridItem } from "@chakra-ui/react";
 const ContentSegment = ({ children, content, test }) => {
   const { viewMode } = useContext(CourseContext);
 
-
   return (
     <Box flex="1 1" bgColor={"gray.50"}>
-      <Grid templateColumns={["1fr 5fr", "1fr 5fr", "1fr 5fr", "1fr 6fr", "1fr 7fr"]} gap={0} height="100%" overflow="hidden">
+      <Grid
+        templateColumns={[
+          "1fr 5fr",
+          "1fr 5fr",
+          "1fr 5fr",
+          "1fr 6fr",
+          "1fr 7fr",
+        ]}
+        gap={0}
+        height="100%"
+        overflow="hidden"
+      >
         <GridItem height="100%" bgColor={"blue.400"} maxW={"200px"}>
           <Box>
             <SideNavContainer content={content} />

@@ -3,7 +3,7 @@ import InfoBox from "./InfoBox";
 
 import CourseContext from "../../context/CourseContext";
 
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 
 import {
   Image,
@@ -17,7 +17,7 @@ import {
 
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 
-const CourseDescriptionBox = ({ content }) => {
+const CourseDescriptionBox = () => {
   const { currentCourse } = useContext(CourseContext);
 
   const course = currentCourse;

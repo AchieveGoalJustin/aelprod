@@ -1,6 +1,4 @@
 import React from "react";
-import { useContext } from "react";
-import CourseContext from "../context/CourseContext";
 
 import { Flex, Heading, Divider } from "@chakra-ui/react";
 

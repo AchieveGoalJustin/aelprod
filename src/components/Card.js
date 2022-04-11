@@ -1,6 +1,5 @@
 import React from "react";
-import { VStack, Divider, Text, Image, Container, Box } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { VStack, Divider, Text, Image, Box } from "@chakra-ui/react";
 
 import { useContext } from "react";
 import CourseContext from "../context/CourseContext";

@@ -15,21 +15,18 @@ const VideoScroller = () => {
   const course = currentCourse;
   const video = currentVideo;
 
-  console.log('CourseVideoList')
-  console.log(courseVideoList)
-  console.log('CourseVideoList.videoContent')
-  console.log(courseVideoList.list.videoContent)
-
-
   const handleLeft = () => {
-    setCurrentVideo(courseVideoList.list.videoContent[parseInt(currentVideo.day) - 2]);
+    setCurrentVideo(
+      courseVideoList.list.videoContent[parseInt(currentVideo.day) - 2]
+    );
   };
 
   const handleRight = () => {
-    setCurrentVideo(courseVideoList.list.videoContent[parseInt(currentVideo.day)]);
+    setCurrentVideo(
+      courseVideoList.list.videoContent[parseInt(currentVideo.day)]
+    );
   };
 
-  console.log(`${process.env.NEXT_PUBLIC_EK3_ROOT}/EK3TN/EK3TN-${video.day}.png`)
   return (
     <Flex w={"100%"}>
       <Flex justifyContent={"space-around"}>
@@ -39,7 +36,12 @@ const VideoScroller = () => {
           justifyContent={"center"}
         >
           {video.day !== "1" ? (
-            <IconButton onClick={handleLeft} icon={<ArrowLeftIcon />} />
+            <Flex flexDir={"column"} m={3}>
+              <Text fontWeight={"extrabold"} color="blue.600">{`Day ${
+                parseInt(video.day) - 1
+              }へ`}</Text>
+              <IconButton onClick={handleLeft} icon={<ArrowLeftIcon />} />
+            </Flex>
           ) : (
             <></>
           )}
@@ -54,13 +56,19 @@ const VideoScroller = () => {
             videoTnUrl={`${process.env.NEXT_PUBLIC_EK3_ROOT}/EK3/EK3TN/EK3TN-${video.day}.png`}
           />
         </Flex>
+
         <Flex
           flexDir={"column"}
           alignItems={"center"}
           justifyContent={"center"}
         >
           {parseInt(video.day) < courseVideoList.list.videoContent.length ? (
-            <IconButton onClick={handleRight} icon={<ArrowRightIcon />} />
+            <Flex flexDir={"column"} m={3}>
+              <Text fontWeight={"extrabold"} color="blue.600">{`Day ${
+                parseInt(video.day) + 1
+              }へ`}</Text>
+              <IconButton onClick={handleRight} icon={<ArrowRightIcon />} />
+            </Flex>
           ) : (
             <></>
           )}

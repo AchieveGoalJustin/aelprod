@@ -18,5 +18,4 @@ const VideoPlayer = ({ videoUrl, videoTnUrl }) => {
   );
 };
 
-//"https://d2pcg0gydriblr.cloudfront.net/EK3/EK3TN/EK3TN-1.png"
 export default VideoPlayer;

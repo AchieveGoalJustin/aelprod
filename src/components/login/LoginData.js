@@ -15,26 +15,20 @@ import {
 } from "@chakra-ui/react";
 
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-import { useCookies } from 'react-cookie'
-import cookie from 'js-cookie'
+import cookie from "js-cookie";
 
-import { API, graphqlOperation } from 'aws-amplify'
-import { listAccounts, listSchools, listUsers } from '../../graphql/queries'
-
-// import axios from "axios";
+import { API, graphqlOperation } from "aws-amplify";
+import { listAccounts, listSchools, listUsers } from "../../graphql/queries";
 
 import { sign } from "jsonwebtoken";
-// import { serialize } from "cookie";
 
-import _ from 'lodash'
-
+import _ from "lodash";
 
 import Link from "next/link";
 
 import { useRouter } from "next/router";
 
 const LoginData = ({ auth }) => {
-
   const secret = process.env.NEXT_PUBLIC_AUTH_SK;
 
   const signToken = (user) => {
@@ -50,78 +44,63 @@ const LoginData = ({ auth }) => {
     return token;
   };
 
-  // const serializeCookie = (token) => {
-  //   const serialized = serialize("AELJWT", token, {
-  //     httpOnly: true,
-  //     secure: process.env.NODE_ENV !== "development",
-  //     sameSite: "strict",
-  //     maxAge: 60 * 60 * 24 * 30,
-  //     path: "/",
-  //   });
-  //   console.log("Serialized");
-  //   return serialized;
-  // };
-
-
   const authenticate = async (credentials) => {
+    let authenticated = true;
 
-    let authenticated = true
+    const { username, password, accountNo, schoolNo } = credentials;
+    const schoolList = await API.graphql(graphqlOperation(listSchools));
+    const userList = await API.graphql(graphqlOperation(listUsers));
+    const accountList = await API.graphql(graphqlOperation(listAccounts));
 
-    const { username, password, accountNo, schoolNo } = credentials
-    const schoolList = await API.graphql(graphqlOperation(listSchools))
-    const userList = await API.graphql(graphqlOperation(listUsers))
-    const accountList = await API.graphql(graphqlOperation(listAccounts))
+    const fetchedSchool = _.find(
+      schoolList.data.listSchools.items,
+      (school) => {
+        return school.number === schoolNo;
+      }
+    );
 
-    console.log(schoolList)
-    console.log(userList)
-    console.log(accountList)
-    console.log(credentials)
-
-    const fetchedSchool = _.find(schoolList.data.listSchools.items, (school) => {
-      return school.number === schoolNo
-    })
-
-    const fetchedAccount = _.find(accountList.data.listAccounts.items, (account) => {
-      return account.number === accountNo
-    })
+    const fetchedAccount = _.find(
+      accountList.data.listAccounts.items,
+      (account) => {
+        return account.number === accountNo;
+      }
+    );
 
     const fetchedUser = _.find(userList.data.listUsers.items, (user) => {
-      return user.username === username
-    })
+      return user.username === username;
+    });
 
+    const isSchool = Boolean(fetchedSchool);
 
-    const isSchool = Boolean(fetchedSchool)
+    const isAccount = Boolean(fetchedAccount);
 
-    const isAccount = Boolean(fetchedAccount)
-
-    const isUser = Boolean(fetchedUser)
-
-
-
+    const isUser = Boolean(fetchedUser);
 
     if (isSchool && isUser && isAccount) {
-      if (username !== fetchedUser.username || password !== fetchedUser.password) {
-        authenticated = false
-        console.log('Username or password is incorrect')
+      if (
+        username !== fetchedUser.username ||
+        password !== fetchedUser.password
+      ) {
+        authenticated = false;
       }
 
-      if (schoolNo !== fetchedSchool.number || accountNo !== fetchedAccount.number) {
-        authenticated = false
-        console.log('School number or account number is incorrect')
+      if (
+        schoolNo !== fetchedSchool.number ||
+        accountNo !== fetchedAccount.number
+      ) {
+        authenticated = false;
       }
 
       if (authenticated) {
-
         const user = {
           username: fetchedUser.username,
-          id: schoolNo + '-' + accountNo + '-' + fetchedUser.number,
+          id: schoolNo + "-" + accountNo + "-" + fetchedUser.number,
           perm: fetchedAccount.permissions,
-
-        }
+        };
 
         const token = signToken(user);
 
-        cookie.set('AELJWT', token, { expires: 3 / 24 })
+        cookie.set("AELJWT", token, { expires: 3 / 24 });
         successToast({
           title: "ログインしました！",
           description: "",
@@ -129,38 +108,35 @@ const LoginData = ({ auth }) => {
           duration: 3000,
           isClosable: true,
         });
-        setAuthComplete(true)
+        setAuthComplete(true);
       } else {
         failToast({
           title: "ログイン出来ませんでした",
-          description: 'ユーザー名、パスワード、または講座番号正しくないです',
+          description: "ユーザー名、パスワード、または講座番号正しくないです",
           status: "error",
           duration: 3000,
           isClosable: true,
         });
-
       }
-
     } else {
       failToast({
         title: "ログイン出来ませんでした",
-        description: 'エラーが発生しました。再入力をお願いします',
+        description: "エラーが発生しました。再入力をお願いします",
         status: "error",
         duration: 3000,
         isClosable: true,
       });
     }
-  }
+  };
 
   const router = useRouter();
   const [schoolNo, setSchoolNo] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [accountNo, setAccountNo] = useState("");
-  const [authComplete, setAuthComplete] = useState(false)
+  const [authComplete, setAuthComplete] = useState(false);
   const [show, setShow] = useState(false);
-  const [buttonEnabled, setButtonEnabled] = useState(auth)
-  // const [cookies, setCookie, removeCookie] = useCookies(['AELJWT'])
+  const [buttonEnabled, setButtonEnabled] = useState(auth);
 
   const successToast = useToast();
   const failToast = useToast();
@@ -169,7 +145,7 @@ const LoginData = ({ auth }) => {
     e.preventDefault();
     const credentials = { schoolNo, accountNo, username, password };
     try {
-      const authawait = await authenticate(credentials)
+      const authawait = await authenticate(credentials);
     } catch (err) {
       console.log(err);
     }
@@ -177,9 +153,9 @@ const LoginData = ({ auth }) => {
 
   useEffect(() => {
     if (authComplete === true) {
-      router.replace("/user/dashboard")
+      router.replace("/user/dashboard");
     }
-  }, [authComplete])
+  }, [authComplete]);
 
   return (
     <VStack background="white" px={4} py={5} borderRadius="md">

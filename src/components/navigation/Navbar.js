@@ -6,7 +6,7 @@ import { Image, Box, Flex } from "@chakra-ui/react";
 
 import NextLink from "next/link";
 
-const Navbar = ({ perm, username }) => {
+const Navbar = ({ username }) => {
   const about = {
     text: "About",
     url1: "/info",
@@ -21,24 +21,14 @@ const Navbar = ({ perm, username }) => {
     {
       text: "プロフィール",
       url: "#",
-      key: 1
+      key: 1,
     },
     {
       text: "ダッシュボード",
       url: "#",
-      key: 2
+      key: 2,
     },
   ];
-
-  const home = {
-    src: "/",
-    text: "トップページへ",
-  };
-
-  const courses = {
-    src: "/user/courses/",
-    text: "コース一覧",
-  };
 
   return (
     <Flex
@@ -72,14 +62,8 @@ const Navbar = ({ perm, username }) => {
             />
           </Box>
         </NextLink>
-
-        {//<NavMenuLink menuprops={about} />
-        }
       </Flex>
       <Flex justifyContent="right" flexDir={"row"} width={"45%"}>
-        {//<NavLink linkinfo={home} />
-          //<NavLink linkinfo={courses} />
-        }
         <UserMenuDropdown menuprops={user} username={username} />
         <SignOutButton />
       </Flex>

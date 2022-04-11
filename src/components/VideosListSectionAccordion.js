@@ -8,16 +8,15 @@ import {
   Heading,
 } from "@chakra-ui/react";
 
-import CourseContext from "../context/CourseContext";
-import VideoContext from "../context/VideoContext";
-
 import VideoCardList from "./VideoCardList";
 
-const VideosListSectionAccordion = ({ videos, sectionTitle, videoMetaData }) => {
-
-
+const VideosListSectionAccordion = ({
+  videos,
+  sectionTitle,
+  videoMetaData,
+}) => {
   return (
-    <Accordion allowToggle mx={4} bg="blue.50" >
+    <Accordion allowToggle mx={4} bg="blue.50">
       <AccordionItem my={4}>
         <AccordionButton bg="blue.200">
           <Box flex="1">
