@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import VideoPlayer from "../VideoPlayer";
+import React, { useContext } from "react";
+import VideoPlayer from "./VideoPlayer";
 
 import VideoContext from "../../context/VideoContext";
 import CourseContext from "../../context/CourseContext";

@@ -2,7 +2,7 @@ import React from "react";
 
 import VideoContext from "../../context/VideoContext";
 
-import VideoScroller from "./VideoScroller";
+import VideoScroller from "../videos/VideoScroller";
 
 import { useContext } from "react";
 

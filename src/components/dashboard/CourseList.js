@@ -2,7 +2,7 @@ import React from "react";
 
 import { Flex, Heading, Divider } from "@chakra-ui/react";
 
-import Card from "../components/Card";
+import Card from "../cards/Card";
 
 const CourseList = ({ courses }) => {
   return (

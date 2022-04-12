@@ -1,15 +1,12 @@
-
 //React
 import React from "react";
 import { useContext, useEffect } from "react";
 
 //Next
-import { useRouter } from "next/router";
 import Head from "next/head";
 
 //Chakra
 import { Flex } from "@chakra-ui/react";
-
 
 //Context
 import CourseContext from "../../../context/CourseContext";
@@ -17,8 +14,7 @@ import VideoContext from "../../../context/VideoContext";
 
 //Utils
 import parseCourses from "../../../utils/parseCourses";
-import getUser from "../../../utils/getUser";
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
 
 //HOC
 import { requireAuthentication } from "../../../components/HOC/ProtectPath";
@@ -26,7 +22,7 @@ import { requireAuthentication } from "../../../components/HOC/ProtectPath";
 //Components
 import Navbar from "../../../components/navigation/Navbar";
 import Footer from "../../../components/structure/Footer";
-import VideoDashboard from "../../../components/VideoDashboard";
+import VideoDashboard from "../../../components/videos/VideoDashboard";
 import VideoDescriptionBox from "../../../components/dashboard/VideoDescriptionBox";
 import ContentSegment from "../../../components/structure/ContentSegment";
 import CourseDescriptionBox from "../../../components/dashboard/CourseDescriptionBox";
@@ -38,7 +34,7 @@ import { ek3 } from "../../../data/videodata/ek3";
 const userDashboard = ({ perm, username }) => {
   //*******************************************************************************START DATA**************************************************************************** */
 
-  const videoData = [ek3, ekj2, ek2]
+  const videoData = [ek3, ekj2, ek2];
   const courses = [
     {
       id: "1",
@@ -232,7 +228,6 @@ const userDashboard = ({ perm, username }) => {
 
   //*******************************************************************************END DATA**************************************************************************** */
 
-
   const fullVideoList = [
     {
       title: "英検3級",
@@ -248,13 +243,12 @@ const userDashboard = ({ perm, username }) => {
     },
   ];
 
-  const permArray = Array.from(perm)
-  const parsed = parseCourses(permArray, courses)
+  const permArray = Array.from(perm);
+  const parsed = parseCourses(permArray, courses);
   const content = {
     courses: parsed.courses,
     tests: parsed.tests,
   };
-
 
   const { setCurrentCourse, setCourseList, viewMode } =
     useContext(CourseContext);
@@ -269,7 +263,6 @@ const userDashboard = ({ perm, username }) => {
     setCourseVideoList(fullVideoList[0]);
     setCurrentVideo(fullVideoList[0].list[0]);
   }, []);
-
 
   try {
     return (
@@ -294,31 +287,29 @@ const userDashboard = ({ perm, username }) => {
       </>
     );
   } catch (err) {
-    return <Flex>{err}</Flex>
+    return <Flex>{err}</Flex>;
   }
-}
+};
 
-export const getServerSideProps = requireAuthentication(
-  async (context) => {
-    const user = context.req.cookies.AELJWT;
-    let perm = []
-    let username = ''
-    if (user) {
-      const decUser = jwt.decode(user);
-      if (decUser.courses.length > 0) {
-        perm = decUser.courses;
-        username = decUser.username
-      } else {
-        perm = "No available courses";
-      }
+export const getServerSideProps = requireAuthentication(async (context) => {
+  const user = context.req.cookies.AELJWT;
+  let perm = [];
+  let username = "";
+  if (user) {
+    const decUser = jwt.decode(user);
+    if (decUser.courses.length > 0) {
+      perm = decUser.courses;
+      username = decUser.username;
+    } else {
+      perm = "No available courses";
     }
-    return {
-      props: {
-        username: username,
-        perm: perm
-      },
-    };
   }
-)
+  return {
+    props: {
+      username: username,
+      perm: perm,
+    },
+  };
+});
 
 export default userDashboard;

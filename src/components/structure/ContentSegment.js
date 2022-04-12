@@ -4,7 +4,7 @@ import SideNavContainer from "../../components/navigation/SideNavContainer";
 
 import CourseContext from "../../context/CourseContext";
 import { useContext } from "react";
-import CourseList from "../../components/CourseList";
+import CourseList from "../dashboard/CourseList";
 
 import { Box, Grid, GridItem } from "@chakra-ui/react";
 

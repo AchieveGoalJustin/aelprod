@@ -1,8 +1,8 @@
 //Remove this import when data is called from API!
-import { courses } from "../data/coursedata";
-import { ek3 } from "../data/videodata/ek3";
-import { ekj2 } from "../data/videodata/ekj2";
-import { ek2 } from "../data/videodata/ek2";
+import { courses } from "../../data/coursedata";
+import { ek3 } from "../../data/videodata/ek3";
+import { ekj2 } from "../../data/videodata/ekj2";
+import { ek2 } from "../../data/videodata/ek2";
 
 import { Heading } from "@chakra-ui/react";
 

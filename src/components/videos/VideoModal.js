@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import CourseContext from "../context/CourseContext";
-import VideoContext from "../context/VideoContext";
+import CourseContext from "../../context/CourseContext";
+import VideoContext from "../../context/VideoContext";
 import {
   Modal,
   ModalOverlay,

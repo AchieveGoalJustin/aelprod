@@ -2,8 +2,8 @@ import React from "react";
 import { VStack, Divider, Text, Image, Box } from "@chakra-ui/react";
 
 import { useContext } from "react";
-import CourseContext from "../context/CourseContext";
-import VideoContext from "../context/VideoContext";
+import CourseContext from "../../context/CourseContext";
+import VideoContext from "../../context/VideoContext";
 
 const Card = (props) => {
   const { setCurrentCourse, courseList, setViewMode } =
