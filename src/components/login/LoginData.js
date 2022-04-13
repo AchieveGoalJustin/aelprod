@@ -52,6 +52,10 @@ const LoginData = ({ auth }) => {
     const userList = await API.graphql(graphqlOperation(listUsers));
     const accountList = await API.graphql(graphqlOperation(listAccounts));
 
+    console.log(schoolList);
+    console.log(userList);
+    console.log(accountList);
+
     const fetchedSchool = _.find(
       schoolList.data.listSchools.items,
       (school) => {

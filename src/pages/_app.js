@@ -4,12 +4,11 @@ import { SessionProvider } from "../context/SessionContext";
 import { DataProvider } from "../context/DataContext";
 import { VideoProvider } from "../context/VideoContext";
 import { extendTheme } from "@chakra-ui/react";
-import Head from 'next/head'
-
+import Head from "next/head";
 
 // import AWSAppSyncClient, { AUTH_TYPE } from 'aws-appsync';
-import { Amplify } from 'aws-amplify';
-import awsconfig from '../aws-exports';
+import { Amplify } from "aws-amplify";
+import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
 
 // const client = new AWSAppSyncClient({
@@ -21,6 +20,7 @@ Amplify.configure(awsconfig);
 //   },
 // });
 
+console.log(awsconfig);
 
 const theme = extendTheme({
   colors: {
@@ -38,9 +38,9 @@ const theme = extendTheme({
     },
   },
   fonts: {
-    heading: 'M PLUS 1p, sans-serif',
-    body: 'M PLUS 1p, sans-serif'
-  }
+    heading: "M PLUS 1p, sans-serif",
+    body: "M PLUS 1p, sans-serif",
+  },
 });
 
 function MyApp({ Component, pageProps }) {
@@ -48,7 +48,8 @@ function MyApp({ Component, pageProps }) {
     <ChakraProvider theme={theme}>
       <Head>
         <style>
-          @import url("https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@100;300;400;500;700;800;900&display=swap");
+          @import
+          url("https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@100;300;400;500;700;800;900&display=swap");
         </style>
       </Head>
       <CourseProvider>

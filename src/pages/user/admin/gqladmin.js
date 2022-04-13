@@ -1,19 +1,7 @@
 import React from 'react'
 import generator from 'generate-password'
 
-// import AWSAppSyncClient, { AUTH_TYPE } from 'aws-appsync';
-// import awsconfig from './aws-exports';
-
-// const client = new AWSAppSyncClient({
-//     url: awsconfig.aws_appsync_graphqlEndpoint,
-//     region: awsconfig.aws_appsync_region,
-//     auth: {
-//         type: AUTH_TYPE.API_KEY,
-//         apiKey: awsconfig.aws_appsync_apiKey,
-//     },
-// });
-
-import { Amplify, API, graphqlOperation } from 'aws-amplify'
+import { API, graphqlOperation } from 'aws-amplify'
 import { listSchools, listUsers, listAccounts } from '../../../graphql/queries'
 import { createUser, createAccount, createSchool } from '../../../graphql/mutations'
 

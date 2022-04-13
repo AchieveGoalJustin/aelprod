@@ -7,4 +7,4 @@ const test = {
   longDesc: "",
 };
 
-export default tests;
+export default test;

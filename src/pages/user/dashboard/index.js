@@ -6,7 +6,7 @@ import { useContext, useEffect } from "react";
 import Head from "next/head";
 
 //Chakra
-import { Flex } from "@chakra-ui/react";
+import { Flex, Heading } from "@chakra-ui/react";
 
 //Context
 import CourseContext from "../../../context/CourseContext";
@@ -83,16 +83,24 @@ const userDashboard = ({ perm, username }) => {
         </Head>
         <Flex flexDir={"column"} height={"100vh"}>
           <Navbar perms={perm} username={username} />
-          <ContentSegment grow={1} basis="auto" content={content}>
-            {viewMode === "video" ? (
-              <VideoDescriptionBox />
-            ) : (
-              <>
-                <CourseDescriptionBox content={content} />
-                <VideoDashboard content={content} videos={videoData[0]} />
-              </>
-            )}
-          </ContentSegment>
+          {courses ? (
+            <ContentSegment grow={1} basis="auto" content={content}>
+              {viewMode === "video" ? (
+                <VideoDescriptionBox />
+              ) : (
+                <>
+                  <CourseDescriptionBox content={content} />
+                  <VideoDashboard content={content} videos={videoData[0]} />
+                </>
+              )}
+            </ContentSegment>
+          ) : (
+            <ContentSegment>
+              <Heading>
+                申し訳ございません。閲覧出来るコースはないようです。
+              </Heading>
+            </ContentSegment>
+          )}
           <Footer />
         </Flex>
       </>

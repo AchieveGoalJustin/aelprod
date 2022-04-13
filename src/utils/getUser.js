@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 const getUser = (req) => {
   const user = req.cookies.AELJWT;
   if (user) {
-    // const user = req.cookies.AELJWT;
     const decUser = jwt.decode(user);
     let perm = [];
     if (decUser.courses.length > 0) {

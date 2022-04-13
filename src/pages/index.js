@@ -1,6 +1,6 @@
 import LoginBox from "../components/login/LoginBox";
 
-import Head from 'next/head'
+import Head from "next/head";
 
 import { ChakraProvider } from "@chakra-ui/provider";
 import { extendTheme } from "@chakra-ui/react";
@@ -8,10 +8,8 @@ import { useEffect, useState } from "react";
 import { useToast } from "@chakra-ui/react";
 
 import { requireAuthentication } from "../components/HOC/ProtectPath";
-// import { removeCookies } from 'cookies-next'
 
-import cookies from 'js-cookie'
-
+import cookies from "js-cookie";
 
 export default function Home({ msg, auth }) {
   const overrides = extendTheme({
@@ -25,7 +23,7 @@ export default function Home({ msg, auth }) {
   });
 
   const messageToast = useToast();
-  const [toastIsDisplayed, setSetIsDisplayed] = useState(false)
+  const [toastIsDisplayed, setSetIsDisplayed] = useState(false);
 
   useEffect(() => {
     if (msg) {
@@ -36,15 +34,15 @@ export default function Home({ msg, auth }) {
         duration: 3000,
         isClosable: true,
       });
-      setSetIsDisplayed(true)
+      setSetIsDisplayed(true);
     }
   }, []);
 
   useEffect(() => {
     if (toastIsDisplayed) {
-      cookies.remove('message')
+      cookies.remove("message");
     }
-  }, [toastIsDisplayed])
+  }, [toastIsDisplayed]);
 
   return (
     <>
@@ -58,22 +56,18 @@ export default function Home({ msg, auth }) {
   );
 }
 
-export const getServerSideProps = requireAuthentication(
-  async (ctx) => {
+export const getServerSideProps = requireAuthentication(async (ctx) => {
+  let msg = ctx.req.cookies.message;
 
-    let msg = ctx.req.cookies.message
-
-    if (!msg) {
-      msg = ""
-    }
-
-    ctx.res.setHeader(
-      "Set-Cookie", ['message=deleted; Max-Age=0'])
-
-    return {
-      props: {
-        msg: msg,
-      }
-    }
+  if (!msg) {
+    msg = "";
   }
-)
+
+  ctx.res.setHeader("Set-Cookie", ["message=deleted; Max-Age=0"]);
+
+  return {
+    props: {
+      msg: msg,
+    },
+  };
+});
