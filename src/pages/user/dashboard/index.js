@@ -11,9 +11,12 @@ import { Flex, Heading } from "@chakra-ui/react";
 //Context
 import CourseContext from "../../../context/CourseContext";
 import VideoContext from "../../../context/VideoContext";
+import SessionContext from "../../../context/SessionContext";
 
 //Utils
-import parseCourses from "../../../utils/parseCourses";
+import datacollator from "../../../utils/datacollator";
+import dataParser from "../../../utils/parseCourseData";
+// import parseCourses from "../../../utils/parseCourses";    **deprecated**
 import jwt from "jsonwebtoken";
 
 //HOC
@@ -27,58 +30,66 @@ import VideoDescriptionBox from "../../../components/dashboard/VideoDescriptionB
 import ContentSegment from "../../../components/structure/ContentSegment";
 import CourseDescriptionBox from "../../../components/dashboard/CourseDescriptionBox";
 
-import { courses } from "../../../data/coursedata";
-import { ekj2 } from "../../../data/videodata/ekj2";
-import { ek2 } from "../../../data/videodata/ek2";
-import { ek3 } from "../../../data/videodata/ek3";
+// import { courses } from "../../../data/coursedata";    **deprecated**
+// import { ekj2 } from "../../../data/videodata/ekj2";
+// import { ek2 } from "../../../data/videodata/ek2";
+// import { ek3 } from "../../../data/videodata/ek3";
 
 const userDashboard = ({ perm, username }) => {
   //Data
-  const videoData = [ek3, ekj2, ek2];
+  // const videoData = [ek3, ekj2, ek2]; **deprecated**
 
-  const fullVideoList = [
-    {
-      title: "英検3級",
-      list: ek3,
-    },
-    {
-      title: "英検2級",
-      list: ek2,
-    },
-    {
-      title: "英検準2級",
-      list: ekj2,
-    },
-  ];
+  // const fullVideoList = [
+  //   {
+  //     title: "英検3級",
+  //     list: ek3,
+  //   },
+  //   {
+  //     title: "英検2級",
+  //     list: ek2,
+  //   },
+  //   {
+  //     title: "英検準2級",
+  //     list: ekj2,
+  //   },
+  // ];
 
-  //Parsing
+  //Parsing data to be consumed by context
+  const fullData = datacollator();
+
   const permArray = Array.from(perm);
-  const parsed = parseCourses(permArray, courses);
-  const content = {
-    courses: parsed.courses,
-    tests: parsed.tests,
-  };
+  const videoList = dataParser.parseVideoList(permArray, fullData);
+  const courseList = dataParser.parseCourseList(permArray, fullData);
+  console.log(videoList);
+  console.log(courseList);
+
+  // const content = {     **deprecated**
+  //   courses: parsed.courses,
+  //   tests: parsed.tests,
+  // };
 
   //Context
-  const { setCurrentCourse, setCourseList, viewMode } =
-    useContext(CourseContext);
+  const { VIEWMODES, viewMode, setViewmode } = useContext(SessionContext);
+
+  const { setCurrentCourse, setCourseList } = useContext(CourseContext);
 
   const { setCurrentVideo, setVideoList, setCourseVideoList } =
     useContext(VideoContext);
 
   //On Render
-  useEffect(() => {
-    setCourseList(courses);
-    setCurrentCourse(courses[0]);
-    setVideoList(fullVideoList);
-    setCourseVideoList(fullVideoList[0]);
-    setCurrentVideo(fullVideoList[0].list[0]);
-  }, []);
+  // useEffect(() => {
+  //   setCourseList(courses);
+  //   setCurrentCourse(courses[0]);
+  //   setVideoList(fullVideoList);
+  //   setCourseVideoList(fullVideoList[0]);
+  //   setCurrentVideo(fullVideoList[0].list[0]);
+  // }, []);
 
   try {
     return (
       <>
-        <Head>
+        <Heading>Hello There</Heading>
+        {/* <Head>
           <title>AEL - レッスン選択</title>
         </Head>
         <Flex flexDir={"column"} height={"100vh"}>
@@ -102,7 +113,7 @@ const userDashboard = ({ perm, username }) => {
             </ContentSegment>
           )}
           <Footer />
-        </Flex>
+        </Flex> */}
       </>
     );
   } catch (err) {

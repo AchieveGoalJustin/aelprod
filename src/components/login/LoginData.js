@@ -15,17 +15,15 @@ import {
 } from "@chakra-ui/react";
 
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-import cookie from "js-cookie";
-
-import { API, graphqlOperation } from "aws-amplify";
-import { listAccounts, listSchools, listUsers } from "../../graphql/queries";
 
 import { sign } from "jsonwebtoken";
+import cookie from "js-cookie";
+
+import fetchUser from "../../utils/fetchUser";
 
 import _ from "lodash";
 
 import Link from "next/link";
-
 import { useRouter } from "next/router";
 
 const LoginData = ({ auth }) => {
@@ -41,103 +39,48 @@ const LoginData = ({ auth }) => {
       },
       secret
     );
+    console.log(token);
     return token;
   };
 
   const authenticate = async (credentials) => {
-    let authenticated = true;
+    const authStatus = await fetchUser(credentials);
 
-    const { username, password, accountNo, schoolNo } = credentials;
-    const schoolList = await API.graphql(graphqlOperation(listSchools));
-    const userList = await API.graphql(graphqlOperation(listUsers));
-    const accountList = await API.graphql(graphqlOperation(listAccounts));
+    if (!authStatus.error && Object.keys(authStatus).length !== 0) {
+      const user = {
+        username: authStatus.username,
+        id: authStatus.id,
+        perm: authStatus.perm,
+      };
 
-    console.log(schoolList);
-    console.log(userList);
-    console.log(accountList);
+      const token = signToken(user);
 
-    const fetchedSchool = _.find(
-      schoolList.data.listSchools.items,
-      (school) => {
-        return school.number === schoolNo;
-      }
-    );
+      cookie.set("AELJWT", token, { expires: 3 / 24 });
 
-    const fetchedAccount = _.find(
-      accountList.data.listAccounts.items,
-      (account) => {
-        return account.number === accountNo;
-      }
-    );
-
-    const fetchedUser = _.find(userList.data.listUsers.items, (user) => {
-      return user.username === username;
-    });
-
-    const isSchool = Boolean(fetchedSchool);
-
-    const isAccount = Boolean(fetchedAccount);
-
-    const isUser = Boolean(fetchedUser);
-
-    if (isSchool && isUser && isAccount) {
-      if (
-        username !== fetchedUser.username ||
-        password !== fetchedUser.password
-      ) {
-        authenticated = false;
-      }
-
-      if (
-        schoolNo !== fetchedSchool.number ||
-        accountNo !== fetchedAccount.number
-      ) {
-        authenticated = false;
-      }
-
-      if (authenticated) {
-        const user = {
-          username: fetchedUser.username,
-          id: schoolNo + "-" + accountNo + "-" + fetchedUser.number,
-          perm: fetchedAccount.permissions,
-        };
-
-        const token = signToken(user);
-
-        cookie.set("AELJWT", token, { expires: 3 / 24 });
-        successToast({
-          title: "ログインしました！",
-          description: "",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-        setAuthComplete(true);
-      } else {
-        failToast({
-          title: "ログイン出来ませんでした",
-          description: "ユーザー名、パスワード、または講座番号正しくないです",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
+      successToast({
+        title: "ログインしました！",
+        description: "",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      setAuthComplete(true);
     } else {
       failToast({
         title: "ログイン出来ませんでした",
-        description: "エラーが発生しました。再入力をお願いします",
+        description: authStatus.error,
         status: "error",
-        duration: 3000,
+        duration: 7000,
         isClosable: true,
       });
     }
   };
 
   const router = useRouter();
-  const [schoolNo, setSchoolNo] = useState("");
+  const [school, setSchool] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [accountNo, setAccountNo] = useState("");
+  const [account, setAccount] = useState("");
   const [authComplete, setAuthComplete] = useState(false);
   const [show, setShow] = useState(false);
   const [buttonEnabled, setButtonEnabled] = useState(auth);
@@ -147,7 +90,7 @@ const LoginData = ({ auth }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const credentials = { schoolNo, accountNo, username, password };
+    const credentials = { school, account, username, password };
     try {
       const authawait = await authenticate(credentials);
     } catch (err) {
@@ -177,7 +120,7 @@ const LoginData = ({ auth }) => {
           onChange={(e) => setUsername(e.target.value)}
         ></Input>
         <Container pt={3}>
-          <FormLabel>講座番号</FormLabel>
+          <FormLabel>登録番号</FormLabel>
         </Container>
         <Flex w={60}>
           <Input
@@ -186,8 +129,8 @@ const LoginData = ({ auth }) => {
             placeholder="1234"
             variant="filled"
             id="2"
-            value={schoolNo}
-            onChange={(e) => setSchoolNo(e.target.value)}
+            value={school}
+            onChange={(e) => setSchool(e.target.value)}
           />
           <Text mx={2} fontSize="xl">
             -
@@ -198,8 +141,8 @@ const LoginData = ({ auth }) => {
             variant="filled"
             placeholder="56"
             id="3"
-            value={accountNo}
-            onChange={(e) => setAccountNo(e.target.value)}
+            value={account}
+            onChange={(e) => setAccount(e.target.value)}
           />
         </Flex>
         <Container pt={3}>

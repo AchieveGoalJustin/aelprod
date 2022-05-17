@@ -17,7 +17,6 @@ export const CourseProvider = ({ children }) => {
         setCurrentTest,
         setCourseList,
         courseList,
-        viewMode,
         setViewMode,
       }}
     >

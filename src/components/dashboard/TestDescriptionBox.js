@@ -10,7 +10,7 @@ import { InfoOutlineIcon } from "@chakra-ui/icons";
 
 const TestDescriptionBox = ({ content }) => {
   const { currentCourse } = useContext(CourseContext);
-
+  
   const getCourse = (content, currentCourse) => {
     return content.courses.filter(
       (course) => course.courseTest === currentCourse

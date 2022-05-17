@@ -2,8 +2,16 @@ import { createContext, useState } from "react";
 
 const SessionContext = createContext();
 
+const VIEWMODES = {
+  INIT: "Initial",
+  TEST: "Test",
+  COURSE: "Course",
+  VIDEO: "Video",
+};
+
 export const SessionProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({ error: "No user" });
+  const [viewMode, setViewmode] = useState(VIEWMODES.INIT);
 
   const getUser = () => {};
 
@@ -11,7 +19,15 @@ export const SessionProvider = ({ children }) => {
 
   return (
     <SessionContext.Provider
-      value={{ currentUser, setCurrentUser, getUser, getCourses }}
+      value={{
+        currentUser,
+        setCurrentUser,
+        getUser,
+        getCourses,
+        VIEWMODES,
+        viewMode,
+        setViewmode,
+      }}
     >
       {children}
     </SessionContext.Provider>
