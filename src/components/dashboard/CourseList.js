@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { Flex, Heading, Divider } from "@chakra-ui/react";
 
 import Card from "../cards/Card";
 
-const CourseList = ({ courses }) => {
+import CourseContext from "../../context/CourseContext";
+
+const CourseList = () => {
+  const { courseList } = useContext(CourseContext);
+
   return (
     <>
       <Heading size={"2xl"} color="red.500">
@@ -12,15 +16,15 @@ const CourseList = ({ courses }) => {
       </Heading>
       <Divider my={3} />
       <Flex>
-        {courses.map((course) => {
+        {courseList.map((course) => {
           return (
             <Card
-              course={course.courseTest}
-              key={course.id}
-              titletext={course.coursename}
-              imgname={course.tnurl}
-              themecolor={course.theme}
-              text={course.courseShortDesc}
+              course={course[Object.keys(course)[0]].courseTest}
+              key={course[Object.keys(course)[0]].id} 
+              titletext={course[Object.keys(course)[0]].coursename}
+              imgname={course[Object.keys(course)[0]].tnurl}
+              themecolor={course[Object.keys(course)[0]].theme}
+              text={course[Object.keys(course)[0]].courseShortDesc}
             />
           );
         })}

@@ -11,21 +11,26 @@ import {
 import VideoCardList from "./VideoCardList";
 
 const VideosListSectionAccordion = ({
-  videos,
+  videoPaths,
   sectionTitle,
   videoMetaData,
+  videos,
 }) => {
   return (
-    <Accordion allowToggle mx={4} bg="blue.50">
+    <Accordion allowToggle mx={4} bg={`${videoMetaData.theme}.50`}>
       <AccordionItem my={4}>
-        <AccordionButton bg="blue.200">
+        <AccordionButton bg={`${videoMetaData.theme}.200`}>
           <Box flex="1">
             <Heading>{sectionTitle}</Heading>
           </Box>
           <AccordionIcon />
         </AccordionButton>
         <AccordionPanel pb={4}>
-          <VideoCardList videos={videos} videoMetaData={videoMetaData} />
+          <VideoCardList
+            videoPaths={videoPaths}
+            videoMetaData={videoMetaData}
+            videos={videos}
+          />
         </AccordionPanel>
       </AccordionItem>
     </Accordion>

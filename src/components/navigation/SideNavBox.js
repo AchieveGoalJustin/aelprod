@@ -8,30 +8,28 @@ import CourseContext from "../../context/CourseContext";
 import VideoContext from "../../context/VideoContext";
 
 const SideNavBox = ({ box, tests }) => {
-  const content = box.links;
-
-  const { currentCourse, setCurrentCourse, courseList, setViewMode } =
+  const { currentCourse, setCurrentCourse, courseList, setViewMode, viewMode } =
     useContext(CourseContext);
 
-  const { setCourseVideoList, videoList } = useContext(VideoContext);
+  const { setCourseVideoList, videoList, courseVideoList } =
+    useContext(VideoContext);
 
-  const comparator = (first, second) => {
-    return first === second;
-  };
+  //Destructure course for easier access in component
+  const extractedCurrentCourse = currentCourse[Object.keys(currentCourse)[0]];
 
   const buttonHandler = (target) => {
-    if (tests[0].text === target) {
+    if (box.type === "test") {
       setViewMode("test");
     } else {
       setViewMode("course");
       const filteredCourses = courseList.filter((course) => {
-        return comparator(course.courseTest, target);
+        return course[Object.keys(course)[0]].courseTest === target;
       });
-      const filteredVideos = videoList.filter((course) => {
-        return comparator(course.title, target);
+      setCurrentCourse(filteredCourses[0]);
+      const filteredVideos = videoList.filter((videos) => {
+        return videos[Object.keys(videos)[0]].test === target;
       });
       setCourseVideoList(filteredVideos[0]);
-      setCurrentCourse(filteredCourses[0]);
       setViewMode("course");
     }
   };
@@ -54,26 +52,32 @@ const SideNavBox = ({ box, tests }) => {
           </Text>
         </Flex>
       </Box>
-      {content.map((item) => (
+      {box.links.map((item, i) => (
         <Button
-          key={item.key}
+          key={i}
           variant="ghost"
           colorScheme="blue"
           my={2}
           mx={2}
           _hover={
-            currentCourse.courseTest === item.text && { cursor: "default" }
+            extractedCurrentCourse.courseTest === item && {
+              cursor: "default",
+            }
           }
-          color={currentCourse.courseTest === item.text ? "white" : "#3182CE"}
-          bgColor={currentCourse.courseTest === item.text ? "#3182CE" : "none"}
-          onClick={() => buttonHandler(item.text)}
+          color={
+            extractedCurrentCourse.courseTest === item ? "white" : "#3182CE"
+          }
+          bgColor={
+            extractedCurrentCourse.courseTest === item ? "#3182CE" : "none"
+          }
+          onClick={() => buttonHandler(item)}
           outline={
-            currentCourse.courseTest === item.text
+            extractedCurrentCourse.courseTest === item
               ? "3px solid #2B6CB0"
               : "none"
           }
         >
-          {item.text}
+          {item.text ? item.text : item}
         </Button>
       ))}
     </Flex>

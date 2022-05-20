@@ -2,29 +2,24 @@ import React, { useContext } from "react";
 import VideoPlayer from "./VideoPlayer";
 
 import VideoContext from "../../context/VideoContext";
-import CourseContext from "../../context/CourseContext";
 
 import { Flex, IconButton, Text } from "@chakra-ui/react";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 
 const VideoScroller = () => {
-  const { currentCourse } = useContext(CourseContext);
   const { currentVideo, courseVideoList, setCurrentVideo } =
     useContext(VideoContext);
 
-  const course = currentCourse;
+  const videoList =
+    courseVideoList[Object.keys(courseVideoList)[0]].videoContent;
   const video = currentVideo;
 
   const handleLeft = () => {
-    setCurrentVideo(
-      courseVideoList.list.videoContent[parseInt(currentVideo.day) - 2]
-    );
+    setCurrentVideo(videoList[parseInt(currentVideo.day) - 2]);
   };
 
   const handleRight = () => {
-    setCurrentVideo(
-      courseVideoList.list.videoContent[parseInt(currentVideo.day)]
-    );
+    setCurrentVideo(videoList[parseInt(currentVideo.day)]);
   };
 
   return (
@@ -52,8 +47,14 @@ const VideoScroller = () => {
           justifyContent={"center"}
         >
           <VideoPlayer
-            videoUrl={`${process.env.NEXT_PUBLIC_EK3_ROOT}/${course.abbr}/${course.abbr}D${video.day}.mp4`}
-            videoTnUrl={`${process.env.NEXT_PUBLIC_EK3_ROOT}/EK3/EK3TN/EK3TN-${video.day}.png`}
+            videoUrl={`${process.env.NEXT_PUBLIC_EK3_ROOT}${
+              courseVideoList[Object.keys(courseVideoList)[0]].slug
+            }/${courseVideoList[Object.keys(courseVideoList)[0]].testid}D${
+              video.day
+            }.mp4`}
+            videoTnUrl={`${process.env.NEXT_PUBLIC_EK3_ROOT}${
+              courseVideoList[Object.keys(courseVideoList)[0]].tnslug
+            }${video.day}.png`}
           />
         </Flex>
 
@@ -62,11 +63,11 @@ const VideoScroller = () => {
           alignItems={"center"}
           justifyContent={"center"}
         >
-          {parseInt(video.day) < courseVideoList.list.videoContent.length ? (
+          {parseInt(video.day) < videoList.length ? (
             <Flex flexDir={"column"} m={3}>
               <Text fontWeight={"extrabold"} color="blue.600">{`Day ${
                 parseInt(video.day) + 1
-              }へ`}</Text>
+              } へ`}</Text>
               <IconButton onClick={handleRight} icon={<ArrowRightIcon />} />
             </Flex>
           ) : (

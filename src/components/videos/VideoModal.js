@@ -20,12 +20,13 @@ import {
 } from "@chakra-ui/react";
 import VideoCard from "./VideoCard";
 
-const VideoModal = ({ video }) => {
+const VideoModal = ({ video, videoPaths, colorTheme }) => {
   const { setCurrentVideo } = useContext(VideoContext);
   const { setViewMode } = useContext(CourseContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleClick = () => {
+    video["theme"] = colorTheme;
     setCurrentVideo(video);
     setViewMode("video");
   };
@@ -33,7 +34,11 @@ const VideoModal = ({ video }) => {
   return (
     <>
       <Box as="button" onClick={onOpen}>
-        <VideoCard video={video} />
+        <VideoCard
+          video={video}
+          colorTheme={colorTheme}
+          videoPaths={videoPaths}
+        />
       </Box>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
@@ -44,7 +49,7 @@ const VideoModal = ({ video }) => {
             <Flex flexDir="column">
               <Image
                 borderRadius="md"
-                src={`${process.env.NEXT_PUBLIC_EK3_ROOT}/EK3/EK3TN/EK3TN-${video.day}.png`}
+                src={`${process.env.NEXT_PUBLIC_EK3_ROOT}${videoPaths.tnslug}${video.day}.png`}
               />
               <Container>
                 <Heading my={2}>レッスン内容</Heading>

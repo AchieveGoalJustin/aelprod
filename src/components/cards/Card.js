@@ -6,7 +6,7 @@ import CourseContext from "../../context/CourseContext";
 import VideoContext from "../../context/VideoContext";
 
 const Card = (props) => {
-  const { setCurrentCourse, courseList, setViewMode } =
+  const { setCurrentCourse, courseList, setViewMode, currentCourse } =
     useContext(CourseContext);
 
   const { setCourseVideoList, videoList } = useContext(VideoContext);
@@ -18,10 +18,10 @@ const Card = (props) => {
   const clickHandler = (target) => {
     setViewMode("course");
     const filteredCourses = courseList.filter((course) => {
-      return comparator(course.courseTest, target);
+      return comparator(course[Object.keys(course)[0]].courseTest, target);
     });
     const filteredVideos = videoList.filter((course) => {
-      return comparator(course.title, target);
+      return comparator(course[Object.keys(course)[0]].test, target);
     });
     setCourseVideoList(filteredVideos[0]);
     setCurrentCourse(filteredCourses[0]);

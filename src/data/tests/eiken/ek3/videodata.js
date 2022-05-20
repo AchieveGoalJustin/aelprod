@@ -1,7 +1,7 @@
 const videos = {
   test: "英検3級",
   testid: "EK3",
-  slug: "/EK3/",
+  slug: "/EK3",
   tnslug: "/EK3/EK3TN/EK3TN-",
   videoContent: [
     {

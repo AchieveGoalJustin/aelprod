@@ -12,6 +12,7 @@ const VIEWMODES = {
 export const SessionProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({ error: "No user" });
   const [viewMode, setViewmode] = useState(VIEWMODES.INIT);
+  const [isLogged, setIsLogged] = useState(false);
 
   const getUser = () => {};
 
@@ -27,6 +28,8 @@ export const SessionProvider = ({ children }) => {
         VIEWMODES,
         viewMode,
         setViewmode,
+        isLogged,
+        setIsLogged,
       }}
     >
       {children}

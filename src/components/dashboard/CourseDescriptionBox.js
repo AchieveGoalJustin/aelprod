@@ -20,7 +20,7 @@ import { InfoOutlineIcon } from "@chakra-ui/icons";
 const CourseDescriptionBox = () => {
   const { currentCourse } = useContext(CourseContext);
 
-  const course = currentCourse;
+  const course = currentCourse[Object.keys(currentCourse)[0]];
 
   return (
     <Box p={5}>
@@ -56,8 +56,8 @@ const CourseDescriptionBox = () => {
           コース詳細
         </Text>
       </Flex>
-      {course.courseLongDesc.map((para) => (
-        <Text fontSize={"xl"} my={3}>
+      {course.courseLongDesc.map((para, i) => (
+        <Text fontSize={"xl"} my={3} key={i}>
           {para}
         </Text>
       ))}

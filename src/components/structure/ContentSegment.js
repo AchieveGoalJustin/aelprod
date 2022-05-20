@@ -8,7 +8,7 @@ import CourseList from "../dashboard/CourseList";
 
 import { Box, Grid, GridItem } from "@chakra-ui/react";
 
-const ContentSegment = ({ children, content, test }) => {
+const ContentSegment = ({ children }) => {
   const { viewMode } = useContext(CourseContext);
 
   return (
@@ -27,7 +27,7 @@ const ContentSegment = ({ children, content, test }) => {
       >
         <GridItem height="100%" bgColor={"blue.400"} maxW={"200px"}>
           <Box>
-            <SideNavContainer content={content} />
+            <SideNavContainer/>
           </Box>
         </GridItem>
         <GridItem>
@@ -36,7 +36,7 @@ const ContentSegment = ({ children, content, test }) => {
               children
             ) : (
               <>
-                <CourseList courses={content.courses} />
+                <CourseList/>
               </>
             )}
           </Box>

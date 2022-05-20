@@ -1,12 +1,12 @@
 //React
 import React from "react";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 
 //Next
 import Head from "next/head";
 
 //Chakra
-import { Flex, Heading } from "@chakra-ui/react";
+import { Flex, Heading, Spinner } from "@chakra-ui/react";
 
 //Context
 import CourseContext from "../../../context/CourseContext";
@@ -30,90 +30,90 @@ import VideoDescriptionBox from "../../../components/dashboard/VideoDescriptionB
 import ContentSegment from "../../../components/structure/ContentSegment";
 import CourseDescriptionBox from "../../../components/dashboard/CourseDescriptionBox";
 
-// import { courses } from "../../../data/coursedata";    **deprecated**
-// import { ekj2 } from "../../../data/videodata/ekj2";
-// import { ek2 } from "../../../data/videodata/ek2";
-// import { ek3 } from "../../../data/videodata/ek3";
-
 const userDashboard = ({ perm, username }) => {
   //Data
-  // const videoData = [ek3, ekj2, ek2]; **deprecated**
-
-  // const fullVideoList = [
-  //   {
-  //     title: "英検3級",
-  //     list: ek3,
-  //   },
-  //   {
-  //     title: "英検2級",
-  //     list: ek2,
-  //   },
-  //   {
-  //     title: "英検準2級",
-  //     list: ekj2,
-  //   },
-  // ];
 
   //Parsing data to be consumed by context
   const fullData = datacollator();
-
   const permArray = Array.from(perm);
-  const videoList = dataParser.parseVideoList(permArray, fullData);
-  const courseList = dataParser.parseCourseList(permArray, fullData);
-  console.log(videoList);
-  console.log(courseList);
 
-  // const content = {     **deprecated**
-  //   courses: parsed.courses,
-  //   tests: parsed.tests,
-  // };
+  const parsedCourseList = dataParser.parseCourseList(permArray, fullData);
+  const parsedVideoList = dataParser.parseVideoList(permArray, fullData);
 
   //Context
-  const { VIEWMODES, viewMode, setViewmode } = useContext(SessionContext);
+  const { VIEWMODES, viewMode, setViewmode } = useContext(CourseContext);
 
-  const { setCurrentCourse, setCourseList } = useContext(CourseContext);
+  const { setCurrentCourse, setCourseList, currentCourse, courseList } =
+    useContext(CourseContext);
 
-  const { setCurrentVideo, setVideoList, setCourseVideoList } =
-    useContext(VideoContext);
+  const { isLogged, setIsLogged } = useContext(SessionContext);
 
-  //On Render
-  // useEffect(() => {
-  //   setCourseList(courses);
-  //   setCurrentCourse(courses[0]);
-  //   setVideoList(fullVideoList);
-  //   setCourseVideoList(fullVideoList[0]);
-  //   setCurrentVideo(fullVideoList[0].list[0]);
-  // }, []);
+  const {
+    setCurrentVideo,
+    setVideoList,
+    setCourseVideoList,
+    currentVideo,
+    videoList,
+    courseVideoList,
+  } = useContext(VideoContext);
+
+  //State
+  const [loaded, setLoaded] = useState(false);
+
+  // On Render
+  useEffect(() => {
+    if (!isLogged) {
+      courseList.error && setCourseList(parsedCourseList);
+      currentCourse.error && setCurrentCourse(parsedCourseList[0]);
+      videoList.error && setVideoList(parsedVideoList);
+      courseVideoList.error && setCourseVideoList(parsedVideoList[0]);
+      const m = Object.keys(parsedVideoList[0]);
+      currentVideo.error &&
+        setCurrentVideo(parsedVideoList[0][m[0]].videoContent[0]);
+      setLoaded(true);
+      setIsLogged(true);
+      console.log("Logged in", isLogged);
+    }
+  }, []);
 
   try {
     return (
       <>
-        <Heading>Hello There</Heading>
-        {/* <Head>
+        <Head>
           <title>AEL - レッスン選択</title>
         </Head>
-        <Flex flexDir={"column"} height={"100vh"}>
-          <Navbar perms={perm} username={username} />
-          {courses ? (
-            <ContentSegment grow={1} basis="auto" content={content}>
-              {viewMode === "video" ? (
-                <VideoDescriptionBox />
-              ) : (
-                <>
-                  <CourseDescriptionBox content={content} />
-                  <VideoDashboard content={content} videos={videoData[0]} />
-                </>
-              )}
-            </ContentSegment>
-          ) : (
-            <ContentSegment>
-              <Heading>
-                申し訳ございません。閲覧出来るコースはないようです。
-              </Heading>
-            </ContentSegment>
-          )}
-          <Footer />
-        </Flex> */}
+        {loaded && isLogged ? (
+          <Flex flexDir={"column"} height={"100vh"}>
+            <Navbar perms={perm} username={username} />
+            {currentCourse ? (
+              <ContentSegment grow={1} basis="auto">
+                {viewMode === "video" ? (
+                  <VideoDescriptionBox />
+                ) : (
+                  <>
+                    <CourseDescriptionBox />
+                    <VideoDashboard />
+                  </>
+                )}
+              </ContentSegment>
+            ) : (
+              <ContentSegment>
+                <Heading>
+                  申し訳ございません。閲覧出来るコースはないようです。
+                </Heading>
+              </ContentSegment>
+            )}
+            <Footer />
+          </Flex>
+        ) : (
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        )}
       </>
     );
   } catch (err) {
@@ -134,6 +134,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
       perm = "No available courses";
     }
   }
+
   return {
     props: {
       username: username,

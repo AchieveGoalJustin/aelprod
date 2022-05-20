@@ -5,7 +5,7 @@ import Head from "next/head";
 import { ChakraProvider } from "@chakra-ui/provider";
 import { extendTheme } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useToast } from "@chakra-ui/react";
+import { useToast, Spinner } from "@chakra-ui/react";
 
 import { requireAuthentication } from "../components/HOC/ProtectPath";
 
@@ -24,6 +24,7 @@ export default function Home({ msg, auth }) {
 
   const messageToast = useToast();
   const [toastIsDisplayed, setSetIsDisplayed] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (msg) {
@@ -36,6 +37,7 @@ export default function Home({ msg, auth }) {
       });
       setSetIsDisplayed(true);
     }
+    setIsLoaded(true);
   }, []);
 
   useEffect(() => {
@@ -49,9 +51,21 @@ export default function Home({ msg, auth }) {
       <Head>
         <title>AEL - ユーザーログイン</title>
       </Head>
-      <ChakraProvider theme={overrides}>
-        <LoginBox auth={auth} />
-      </ChakraProvider>
+      {isLoaded ? (
+        <ChakraProvider theme={overrides}>
+          <LoginBox auth={auth} />
+        </ChakraProvider>
+      ) : (
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+          mx="auto"
+          my="auto"
+        />
+      )}
     </>
   );
 }
@@ -64,7 +78,6 @@ export const getServerSideProps = requireAuthentication(async (ctx) => {
   }
 
   ctx.res.setHeader("Set-Cookie", ["message=deleted; Max-Age=0"]);
-
   return {
     props: {
       msg: msg,

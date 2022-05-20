@@ -20,8 +20,6 @@ Amplify.configure(awsconfig);
 //   },
 // });
 
-console.log(awsconfig);
-
 const theme = extendTheme({
   colors: {
     brown: {
@@ -47,10 +45,20 @@ function MyApp({ Component, pageProps }) {
   return (
     <ChakraProvider theme={theme}>
       <Head>
-        <style>
+        {/* <style>
           @import
           url("https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@100;300;400;500;700;800;900&display=swap");
-        </style>
+        </style> */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="true"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@100;300;400;500;700;800;900&display=swap"
+          rel="stylesheet"
+        />
       </Head>
       <CourseProvider>
         <VideoProvider>

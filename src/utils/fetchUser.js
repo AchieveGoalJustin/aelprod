@@ -20,6 +20,7 @@ const fetchUser = async (inputData) => {
   if (filteredSchool.length === 0) {
     authData = {
       error: "入力された学校番号は登録されておりません。",
+      code: 1,
     };
     return authData;
   }
@@ -40,6 +41,7 @@ const fetchUser = async (inputData) => {
   if (filteredAcct.length === 0) {
     authData = {
       error: "入力された講座番号は、学校番号と連携されていません。",
+      code: 2,
     };
     return authData;
   }
@@ -62,12 +64,13 @@ const fetchUser = async (inputData) => {
   if (filteredUser.length === 0) {
     authData = {
       error: "入力されたユーザー名、またはパスワードが間違っています。",
+      code: 3,
     };
     return authData;
   }
 
   if (Object.keys(authData).length === 0) {
-    authData = { err: "サーバーに接続できませんでした。" };
+    authData = { error: "サーバーに接続できませんでした。" };
   }
 
   authData = {

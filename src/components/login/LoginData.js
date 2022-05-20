@@ -39,7 +39,6 @@ const LoginData = ({ auth }) => {
       },
       secret
     );
-    console.log(token);
     return token;
   };
 
@@ -73,6 +72,7 @@ const LoginData = ({ auth }) => {
         duration: 7000,
         isClosable: true,
       });
+      setErrorCode(authStatus.code);
     }
   };
 
@@ -84,6 +84,7 @@ const LoginData = ({ auth }) => {
   const [authComplete, setAuthComplete] = useState(false);
   const [show, setShow] = useState(false);
   const [buttonEnabled, setButtonEnabled] = useState(auth);
+  const [errorCode, setErrorCode] = useState(0);
 
   const successToast = useToast();
   const failToast = useToast();
@@ -104,6 +105,10 @@ const LoginData = ({ auth }) => {
     }
   }, [authComplete]);
 
+  useEffect(() => {
+    errorCode !== 0 && console.log("Error thrown with error code: ", errorCode);
+  }, [errorCode]);
+
   return (
     <VStack background="white" px={4} py={5} borderRadius="md">
       <Heading pb={4}>ユーザーログイン</Heading>
@@ -111,51 +116,104 @@ const LoginData = ({ auth }) => {
         <Container>
           <FormLabel alignSelf="left">ユーザー名</FormLabel>
         </Container>
-        <Input
-          w={"80%"}
-          placeholder="AchieveTaro"
-          variant="filled"
-          id="1"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        ></Input>
+        {errorCode === 3 ? (
+          <Input
+            isInvalid
+            w={"80%"}
+            placeholder="AchieveTaro"
+            variant="filled"
+            id="1"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            bgColor="red.100"
+          ></Input>
+        ) : (
+          <Input
+            w={"80%"}
+            placeholder="AchieveTaro"
+            variant="filled"
+            id="1"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          ></Input>
+        )}
         <Container pt={3}>
           <FormLabel>登録番号</FormLabel>
         </Container>
         <Flex w={60}>
-          <Input
-            maxLength={4}
-            w={"50%"}
-            placeholder="1234"
-            variant="filled"
-            id="2"
-            value={school}
-            onChange={(e) => setSchool(e.target.value)}
-          />
+          {errorCode === 1 ? (
+            <Input
+              isInvalid
+              maxLength={4}
+              w={"50%"}
+              placeholder="1234"
+              variant="filled"
+              id="2"
+              value={school}
+              onChange={(e) => setSchool(e.target.value)}
+              bgColor="red.100"
+            />
+          ) : (
+            <Input
+              maxLength={4}
+              w={"50%"}
+              placeholder="1234"
+              variant="filled"
+              id="2"
+              value={school}
+              onChange={(e) => setSchool(e.target.value)}
+            />
+          )}
           <Text mx={2} fontSize="xl">
             -
           </Text>
-          <Input
-            maxLength={2}
-            w={"25%"}
-            variant="filled"
-            placeholder="56"
-            id="3"
-            value={account}
-            onChange={(e) => setAccount(e.target.value)}
-          />
+          {errorCode === 2 ? (
+            <Input
+              isInvalid
+              maxLength={2}
+              w={"25%"}
+              variant="filled"
+              placeholder="56"
+              id="3"
+              value={account}
+              onChange={(e) => setAccount(e.target.value)}
+              bgColor="red.100"
+            />
+          ) : (
+            <Input
+              maxLength={2}
+              w={"25%"}
+              variant="filled"
+              placeholder="56"
+              id="3"
+              value={account}
+              onChange={(e) => setAccount(e.target.value)}
+            />
+          )}
         </Flex>
         <Container pt={3}>
           <FormLabel>パスワード</FormLabel>
         </Container>
         <InputGroup w={"80%"}>
-          <Input
-            variant="filled"
-            type={show ? "text" : "password"}
-            id="4"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></Input>
+          {errorCode === 3 ? (
+            <Input
+              isInvalid
+              variant="filled"
+              type={show ? "text" : "password"}
+              id="4"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              backgroundColor="red.100"
+            ></Input>
+          ) : (
+            <Input
+              variant="filled"
+              type={show ? "text" : "password"}
+              id="4"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            ></Input>
+          )}
           <InputRightAddon
             bgColor="blue.600"
             as="button"

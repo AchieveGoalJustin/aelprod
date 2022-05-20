@@ -1,45 +1,73 @@
-//Remove this import when data is called from API!
-import { courses } from "../../data/coursedata";
-import { ek3 } from "../../data/videodata/ek3";
-import { ekj2 } from "../../data/videodata/ekj2";
-import { ek2 } from "../../data/videodata/ek2";
-
 import { Heading } from "@chakra-ui/react";
 
-import React from "react";
+import React, { useContext } from "react";
+
+import VideoContext from "../../context/VideoContext";
+import CourseContext from "../../context/CourseContext";
+
 import VideosListSectionAccordion from "./VideosListSectionAccordion";
 
 const VideoDashboard = () => {
-  const videoList = ek3.videoContent;
-  const videoMetaData = {
-    test: ek3.test,
-    testid: ek3.testid,
-    slug: ek3.slug,
-    tnslug: ek3.tnslug,
+  const { courseVideoList } = useContext(VideoContext);
+  const { currentCourse } = useContext(CourseContext);
+
+  console.log(currentCourse);
+
+  const deconstructedVideoObj =
+    courseVideoList[Object.keys(courseVideoList)[0]];
+
+  //Separate path data from video data
+  const getVideoPaths = (obj) => {
+    let returnData = {};
+
+    Object.entries(obj).forEach((key) => {
+      if (key[0] !== "videoContent") {
+        returnData[key[0]] = key[1];
+      }
+    });
+    return returnData;
   };
 
-  const sectionList = Object.values(courses[0].courseSections);
+  //Isolate video data
+  const getVideoMetaData = (videoObj, courseObj) => {
+    console.log("From geVideoMetaData");
+    console.log(courseObj);
+    let returnData = {};
+    Object.entries(videoObj).forEach((key) => {
+      if (key[0] === "videoContent") {
+        returnData[key[0]] = key[1];
+      }
 
-  if (!Object.entries)
-    Object.entries = function (obj) {
-      var ownProps = Object.keys(obj),
-        i = ownProps.length,
-        resArray = new Array(i); // preallocate the Array
+      returnData["theme"] = courseObj[Object.keys(courseObj)[0]].theme;
+    });
+    return returnData;
+  };
 
-      while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]];
-      return resArray;
-    };
+  //Isolate section data
+  const getSectionList = (array) => {
+    const sectionList = [];
+    array.forEach((item) => {
+      if (!sectionList.includes(item.section)) {
+        sectionList.push(item.section);
+      }
+    });
+    return sectionList;
+  };
 
-  function groupVideosBySection(sectionTitle, videoList) {
+  function groupVideosBySection(section, metadata) {
     const groupedVideos = [];
 
-    videoList.forEach((video) => {
-      if (video.section === sectionTitle) {
+    metadata.forEach((video) => {
+      if (video.section === section) {
         groupedVideos.push(video);
       }
     });
     return groupedVideos;
   }
+
+  const videoPaths = getVideoPaths(deconstructedVideoObj);
+  const videoMetaData = getVideoMetaData(deconstructedVideoObj, currentCourse);
+  const sectionList = getSectionList(videoMetaData.videoContent);
 
   let key = 0;
   return (
@@ -47,13 +75,14 @@ const VideoDashboard = () => {
       <Heading color="red.500">動画の一覧</Heading>
       {sectionList.map((section) => {
         key++;
-        let videos = groupVideosBySection(section, videoList);
+        let videos = groupVideosBySection(section, videoMetaData.videoContent);
         return (
           <VideosListSectionAccordion
             key={key}
             videos={videos}
-            sectionTitle={section}
             videoMetaData={videoMetaData}
+            sectionTitle={section}
+            videoPaths={videoPaths}
           />
         );
       })}
