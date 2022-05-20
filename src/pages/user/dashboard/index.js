@@ -35,6 +35,9 @@ const userDashboard = ({ perm, username }) => {
 
   //Parsing data to be consumed by context
   const fullData = datacollator();
+
+  // console.log(fullData);
+
   const permArray = Array.from(perm);
 
   const parsedCourseList = dataParser.parseCourseList(permArray, fullData);

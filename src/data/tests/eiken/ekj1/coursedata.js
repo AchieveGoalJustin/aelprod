@@ -1,14 +1,14 @@
-export const course = {
-  id: "5",
+const course = {
+  id: "6",
   test: "英検",
-  abbr: "EK5",
+  abbr: "EKJ1",
   tnurl: null,
-  theme: "orange",
-  coursename: "英検®5級絶対合格講座",
+  theme: "gray",
+  coursename: "英検®準1級絶対合格講座",
   courseSub: "",
   courseMetaTest: "英検",
-  courseTest: "英検5級",
-  videoNo: "20",
+  courseTest: "英検準1級",
+  videoNo: "15",
   courseShortDesc: "",
   courseLongDesc: ["", "", ""],
   courseSections: {

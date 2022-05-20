@@ -11,11 +11,20 @@ const dataParser = {
     return returnArray;
   },
   parseVideoList(courseArray, fullDataList) {
+
+    console.log("All Data:")
+
     let returnArray = [];
     courseArray.forEach((course) => {
+      console.log("Parsing");
+      console.log(course);
+      console.log("From");
+      console.log(courseArray);
       returnArray.push({
         [course]: fullDataList[course.toLowerCase()].videos,
       });
+      console.log("parsed successfully");
+      console.log(returnArray);
     });
     return returnArray;
   },

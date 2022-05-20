@@ -1,4 +1,4 @@
-export const videos = {
+const videos = {
   test: "英検4級",
   testid: "EK4",
   slug: "/EK4/",
@@ -166,3 +166,5 @@ export const videos = {
     },
   ],
 };
+
+export default videos;
