@@ -79,55 +79,51 @@ const userDashboard = ({ perm, username }) => {
     }
   }, []);
 
-  try {
-    return (
-      <>
-        <Head>
-          <title>AEL - レッスン選択</title>
-        </Head>
-        {loaded && isLogged ? (
-          <Flex flexDir={"column"} height={"100vh"}>
-            <Navbar perms={perm} username={username} />
-            {currentCourse ? (
-              <ContentSegment grow={1} basis="auto">
-                {viewMode === "video" ? (
-                  <VideoDescriptionBox />
-                ) : (
-                  <>
-                    <CourseDescriptionBox />
-                    <VideoDashboard />
-                  </>
-                )}
-              </ContentSegment>
-            ) : (
-              <ContentSegment>
-                <Heading>
-                  申し訳ございません。閲覧出来るコースはないようです。
-                </Heading>
-              </ContentSegment>
-            )}
-            <Footer />
-          </Flex>
-        ) : (
-          <Flex flexDir="column" alignItems="center" w="100%" h="100vh">
-            <Spacer />
-            <Heading>ログアウトしています。</Heading>
-            <Spinner
-              m={"auto"}
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="xl"
-            />
-            <Spacer />
-          </Flex>
-        )}
-      </>
-    );
-  } catch (err) {
-    return <Flex>{err}</Flex>;
-  }
+  return (
+    <>
+      <Head>
+        <title>AEL - レッスン選択</title>
+      </Head>
+      {loaded && isLogged ? (
+        <Flex flexDir={"column"} height={"100vh"}>
+          <Navbar perms={perm} username={username} />
+          {currentCourse ? (
+            <ContentSegment grow={1} basis="auto">
+              {viewMode === "video" ? (
+                <VideoDescriptionBox />
+              ) : (
+                <>
+                  <CourseDescriptionBox />
+                  <VideoDashboard />
+                </>
+              )}
+            </ContentSegment>
+          ) : (
+            <ContentSegment>
+              <Heading>
+                申し訳ございません。閲覧出来るコースはないようです。
+              </Heading>
+            </ContentSegment>
+          )}
+          <Footer />
+        </Flex>
+      ) : (
+        <Flex flexDir="column" alignItems="center" w="100%" h="100vh">
+          <Spacer />
+          <Heading>ログアウトしています。</Heading>
+          <Spinner
+            m={"auto"}
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+          <Spacer />
+        </Flex>
+      )}
+    </>
+  );
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {

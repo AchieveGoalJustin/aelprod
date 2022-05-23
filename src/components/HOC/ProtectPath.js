@@ -43,6 +43,19 @@ export function requireAuthentication(gssp) {
         };
       }
     }
+
+    if (url.includes("/admin")) {
+      const decoded = verify(jwt, secret);
+      console.log(decoded);
+      if (!decoded.courses.includes("ADM")) {
+        return {
+          redirect: {
+            permanent: false,
+            destination: process.env.NEXT_PUBLIC_PATH_ROOT,
+          },
+        };
+      }
+    }
     return await gssp(ctx);
   };
 }
