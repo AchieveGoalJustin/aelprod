@@ -7,6 +7,7 @@ const Card = ({ video, videoPaths, colorTheme }) => {
       background={`${colorTheme}.100`}
       boxShadow="md"
       maxWidth="30ch"
+      minWidth="25ch"
       p={5}
       m={5}
       borderRadius="md"

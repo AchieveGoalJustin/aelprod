@@ -1,5 +1,5 @@
 import React from "react";
-import { VStack, Divider, Text, Image, Box } from "@chakra-ui/react";
+import { VStack, Divider, Text, Image, Box, } from "@chakra-ui/react";
 
 import { useContext } from "react";
 import CourseContext from "../../context/CourseContext";
@@ -37,6 +37,7 @@ const Card = (props) => {
       background={props.themecolor + ".100"}
       boxShadow="md"
       maxWidth="30ch"
+      minWidth="25ch"
       p={5}
       m={5}
       borderRadius="md"

@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import Head from "next/head";
 
 //Chakra
-import { Flex, Heading, Spinner } from "@chakra-ui/react";
+import { Flex, Heading, Spinner, Spacer } from "@chakra-ui/react";
 
 //Context
 import CourseContext from "../../../context/CourseContext";
@@ -109,13 +109,19 @@ const userDashboard = ({ perm, username }) => {
             <Footer />
           </Flex>
         ) : (
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="xl"
-          />
+          <Flex flexDir="column" alignItems="center" w="100%" h="100vh">
+            <Spacer />
+            <Heading>ログアウトしています。</Heading>
+            <Spinner
+              m={"auto"}
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"
+            />
+            <Spacer />
+          </Flex>
         )}
       </>
     );
