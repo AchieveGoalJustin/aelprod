@@ -1,26 +1,26 @@
 # This "input" configures a global authorization rule to enable public access to
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
-
+input AMPLIFY {
+  globalAuthRule: AuthRule = { allow: public }
+} # FOR TESTING ONLY!
 #School Data Types
-type School @model{
-    number: Int! #4-digit number
-    name: String!
-    accounts:[Account!] @hasMany
+type School @model {
+  number: String! #4-digit number
+  name: String!
+  accounts: [Account!] @hasMany
 }
 
-type Account@model {
-    number: Int! #2-digit number
-    permissions: [String!] #Find a way to connect to courses with abbr
-    usercount: Int!
-    users: [User!] @hasMany
+type Account @model {
+  number: String! #2-digit number
+  permissions: [String!] #Find a way to connect to courses with abbr
+  usercount: Int!
+  users: [User!] @hasMany
 }
 
 #User Data Types
 
 type User @model {
-    number: Int! #4-digit number
-    username: String!
-    password: String!
+  number: String! #4-digit number
+  username: String!
+  password: String!
 }
-
