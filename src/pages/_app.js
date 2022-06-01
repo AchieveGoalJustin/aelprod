@@ -1,6 +1,7 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { CourseProvider } from "../context/CourseContext";
 import { SessionProvider } from "../context/SessionContext";
+import { AdminProvider } from "../context/AdminContext";
 import { DataProvider } from "../context/DataContext";
 import { VideoProvider } from "../context/VideoContext";
 import { extendTheme } from "@chakra-ui/react";
@@ -63,9 +64,11 @@ function MyApp({ Component, pageProps }) {
       <CourseProvider>
         <VideoProvider>
           <SessionProvider>
-            <DataProvider>
-              <Component {...pageProps} />
-            </DataProvider>
+            <AdminProvider>
+              <DataProvider>
+                <Component {...pageProps} />
+              </DataProvider>
+            </AdminProvider>
           </SessionProvider>
         </VideoProvider>
       </CourseProvider>

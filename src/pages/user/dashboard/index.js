@@ -16,7 +16,6 @@ import SessionContext from "../../../context/SessionContext";
 //Utils
 import datacollator from "../../../utils/datacollator";
 import dataParser from "../../../utils/parseCourseData";
-// import parseCourses from "../../../utils/parseCourses";    **deprecated**
 import jwt from "jsonwebtoken";
 
 //HOC

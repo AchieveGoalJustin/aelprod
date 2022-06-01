@@ -15,6 +15,7 @@ type Account @model {
   permissions: [String!] #Find a way to connect to courses with abbr
   usercount: Int!
   users: [User!] @hasMany
+  school: School @belongsTo
 }
 
 #User Data Types
@@ -23,4 +24,5 @@ type User @model {
   number: String! #4-digit number
   username: String!
   password: String!
+  account: Account @belongsTo
 }

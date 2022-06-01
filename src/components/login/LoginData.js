@@ -39,6 +39,7 @@ const LoginData = ({ auth }) => {
       },
       secret
     );
+    setUserPerm(user.perm);
     return token;
   };
 
@@ -85,6 +86,7 @@ const LoginData = ({ auth }) => {
   const [show, setShow] = useState(false);
   const [buttonEnabled, setButtonEnabled] = useState(auth);
   const [errorCode, setErrorCode] = useState(0);
+  const [userPerm, setUserPerm] = useState("");
 
   const successToast = useToast();
   const failToast = useToast();
@@ -101,7 +103,11 @@ const LoginData = ({ auth }) => {
 
   useEffect(() => {
     if (authComplete === true) {
-      router.replace("/user/dashboard");
+      if (userPerm.includes("ADM")) {
+        router.replace("/user/admin/gqladmin");
+      } else {
+        router.replace("/user/dashboard");
+      }
     }
   }, [authComplete]);
 

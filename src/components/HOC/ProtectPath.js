@@ -11,13 +11,24 @@ export function requireAuthentication(gssp) {
     if (url == "/") {
       if (jwt) {
         try {
-          verify(jwt, secret);
-          return {
-            redirect: {
-              permanent: false,
-              destination: "/user/dashboard",
-            },
-          };
+          const decoded = verify(jwt, secret);
+          console.log(decoded);
+          if (decoded.courses.includes("ADM")) {
+            return {
+              redirect: {
+                permanent: false,
+                destination: "/user/admin/gqladmin",
+              },
+            };
+          } else {
+            verify(jwt, secret);
+            return {
+              redirect: {
+                permanent: false,
+                destination: "/user/dashboard",
+              },
+            };
+          }
         } catch (err) {}
       }
     }
@@ -46,7 +57,6 @@ export function requireAuthentication(gssp) {
 
     if (url.includes("/admin")) {
       const decoded = verify(jwt, secret);
-      console.log(decoded);
       if (!decoded.courses.includes("ADM")) {
         return {
           redirect: {

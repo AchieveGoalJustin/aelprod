@@ -21,17 +21,25 @@ import {
   Heading,
   Text,
   Box,
+  Flex,
+  Spacer,
   Select,
   FormLabel,
 } from "@chakra-ui/react";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import { requireAuthentication } from "../../../components/HOC/ProtectPath";
+
+import AcctPanel from "../../../components/admin/AcctPanel";
 import SchoolPanel from "../../../components/admin/SchoolPanel";
 import Navbar from "../../../components/navigation/Navbar";
 
+import AdminContext from "../../../context/AdminContext";
+
 const awsapi = (props) => {
+  const { accountIsLoaded } = useContext(AdminContext);
+
   //Rendering state variables
   const [render, setRender] = useState(true);
 
@@ -147,7 +155,15 @@ const awsapi = (props) => {
   return (
     <>
       <Navbar />
-      <SchoolPanel />
+      <Box minH="100vh" minW="100vw" bg="blue.300" py={"2%"}>
+        <Flex>
+          <Spacer />
+          <SchoolPanel />
+          <Spacer />
+          {accountIsLoaded ? <AcctPanel /> : ""}
+          <Spacer />
+        </Flex>
+      </Box>
     </>
     // <Container>
     //   <Box>

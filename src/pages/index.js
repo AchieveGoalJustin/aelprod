@@ -59,7 +59,7 @@ export default function Home({ msg, auth }) {
         <Spinner
           thickness="4px"
           speed="0.65s"
-          emptyColor="gray.200"
+          emptyColor="gray.200" 
           color="blue.500"
           size="xl"
           mx="auto"
@@ -78,6 +78,7 @@ export const getServerSideProps = requireAuthentication(async (ctx) => {
   }
 
   ctx.res.setHeader("Set-Cookie", ["message=deleted; Max-Age=0"]);
+
   return {
     props: {
       msg: msg,
