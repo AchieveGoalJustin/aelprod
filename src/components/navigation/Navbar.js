@@ -20,12 +20,12 @@ const Navbar = ({ username }) => {
   const user = [
     {
       text: "プロフィール",
-      url: "#",
+      url: `${process.env.NEXT_PUBLIC_PATH_ROOT}/user/dashboard/profile/`,
       key: 1,
     },
     {
       text: "ダッシュボード",
-      url: "#",
+      url: `${process.env.NEXT_PUBLIC_PATH_ROOT}/user/dashboard/`,
       key: 2,
     },
   ];

@@ -1,5 +1,5 @@
 import React from "react";
-import { VStack, Divider, Text, Image, Box, } from "@chakra-ui/react";
+import { VStack, Divider, Text, Image, Box } from "@chakra-ui/react";
 
 import { useContext } from "react";
 import CourseContext from "../../context/CourseContext";
@@ -51,7 +51,7 @@ const Card = (props) => {
       <VStack>
         <Image
           borderRadius="md"
-          src={`${process.env.NEXT_PUBLIC_BRANDING_ROOT}/course-thumbnails/${props.imgname}`}
+          src={`${process.env.NEXT_PUBLIC_BRANDING_ROOT}/course-thumbnails/${props.abbr}.png`}
         />
         <Text fontSize="xl" fontWeight="bold">
           {props.titletext}

@@ -1,7 +1,9 @@
 import React from "react";
 
+import UnderConstruction from "../../../../components/placeholders/UnderConstruction";
+
 const index = () => {
-  return <div>Profile</div>;
+  return <UnderConstruction />;
 };
 
 export default index;

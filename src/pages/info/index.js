@@ -1,5 +1,7 @@
+import UnderConstruction from "../../components/placeholders/UnderConstruction";
+
 const InfoIndex = () => {
-  return <h1>Info</h1>;
+  return <UnderConstruction />;
 };
 
 export default InfoIndex;

@@ -26,6 +26,7 @@ const CourseList = () => {
                 imgname={course[Object.keys(course)[0]].tnurl}
                 themecolor={course[Object.keys(course)[0]].theme}
                 text={course[Object.keys(course)[0]].courseShortDesc}
+                abbr={course[Object.keys(course)[0]].abbr}
               />
             );
           })}

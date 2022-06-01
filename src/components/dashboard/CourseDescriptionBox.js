@@ -40,7 +40,7 @@ const CourseDescriptionBox = () => {
       <Flex>
         <Box width="60%" my={5}>
           <Image
-            src={`${process.env.NEXT_PUBLIC_BRANDING_ROOT}/course-thumbnails/${course.tnurl}`}
+            src={`${process.env.NEXT_PUBLIC_BRANDING_ROOT}/course-thumbnails/${course.abbr}.png`}
           />
         </Box>
         <VStack height="100%" m="auto" spacing={5} maxW={"16vw"}>
