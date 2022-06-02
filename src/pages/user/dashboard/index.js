@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 
 //Next
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 //Chakra
 import { Flex, Heading, Spinner, Spacer } from "@chakra-ui/react";
@@ -30,12 +31,8 @@ import ContentSegment from "../../../components/structure/ContentSegment";
 import CourseDescriptionBox from "../../../components/dashboard/CourseDescriptionBox";
 
 const userDashboard = ({ perm, username }) => {
-  //Data
-
   //Parsing data to be consumed by context
   const fullData = datacollator();
-
-  // console.log(fullData);
 
   const permArray = Array.from(perm);
 
@@ -59,12 +56,15 @@ const userDashboard = ({ perm, username }) => {
     courseVideoList,
   } = useContext(VideoContext);
 
+  //Router
+  const router = useRouter();
+
   //State
   const [loaded, setLoaded] = useState(false);
 
   // On Render
   useEffect(() => {
-    if (!isLogged) {
+    if (!isLogged || !loaded) {
       courseList.error && setCourseList(parsedCourseList);
       currentCourse.error && setCurrentCourse(parsedCourseList[0]);
       videoList.error && setVideoList(parsedVideoList);
@@ -74,7 +74,9 @@ const userDashboard = ({ perm, username }) => {
         setCurrentVideo(parsedVideoList[0][m[0]].videoContent[0]);
       setLoaded(true);
       setIsLogged(true);
-      console.log("Logged in", isLogged);
+      // router.events.on("routeChangeStart", () => {
+      //   setLoaded(false)
+      // });
     }
   }, []);
 

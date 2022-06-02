@@ -22,6 +22,14 @@ const VideoScroller = () => {
     setCurrentVideo(videoList[parseInt(currentVideo.day)]);
   };
 
+  console.log(
+    `${process.env.NEXT_PUBLIC_EK3_ROOT}${
+      courseVideoList[Object.keys(courseVideoList)[0]].slug
+    }/${courseVideoList[Object.keys(courseVideoList)[0]].testid}D${
+      video.day
+    }.mp4`
+  );
+
   return (
     <Flex w={"100%"}>
       <Flex justifyContent={"space-around"}>
