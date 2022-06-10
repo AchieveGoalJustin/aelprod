@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+
 import {
   Select,
   Box,
@@ -25,6 +26,8 @@ import CreateSchool from "./CreateSchool";
 import DeleteSchool from "./DeleteSchool";
 
 import AdminContext from "../../context/AdminContext";
+
+import PlayerScaffold from "../audio/PlayerScaffold";
 
 const SchoolPanel = () => {
   const { schoolId, setSchoolId, setAccountIsLoaded } =
@@ -164,6 +167,7 @@ const SchoolPanel = () => {
             Load Accounts for This School
           </Button>
         </Flex>
+        <PlayerScaffold />
       </Container>
     </>
   );

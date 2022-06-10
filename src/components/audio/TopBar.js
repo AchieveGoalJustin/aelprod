@@ -7,7 +7,7 @@ import {
   Text,
   Spacer,
   Box,
-  Spinner,
+  Heading,
 } from "@chakra-ui/react";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 
@@ -15,10 +15,10 @@ import VolumeControl from "./VolumeControl";
 
 const TopBar = ({
   dataIndex,
+  duration,
+  formatTime,
   isMax,
   currentPlaying,
-  formatTime,
-  duration,
   isYoshu,
   isFukushu,
   handleQuestionType,
@@ -32,7 +32,7 @@ const TopBar = ({
         width="100%
         "
       >
-        <ButtonGroup size="sm" isAttached boxShadow="md">
+        <ButtonGroup size="md" isAttached boxShadow="lg">
           <Button
             outline={isYoshu && "2px solid blue"}
             isDisabled={isYoshu && true}
@@ -52,6 +52,16 @@ const TopBar = ({
             復習
           </Button>
         </ButtonGroup>
+        <Spacer />
+        <Heading
+          color={isYoshu ? "blue.800" : isFukushu && "red.800"}
+          bg="white"
+          borderRadius="md"
+          size="lg"
+          p={2}
+        >
+          {isYoshu ? "予習" : isFukushu && "復習"}
+        </Heading>
         <Spacer />
         <ButtonGroup isAttached boxShadow="md">
           {!(dataIndex === 0) ? (
@@ -88,12 +98,26 @@ const TopBar = ({
             bg={isYoshu ? "blue.50" : isFukushu && "red.50"}
             fontSize="lg"
             p={2}
+            ps={5}
+            pe={3}
             fontWeight="bold"
           >
             {isYoshu
-              ? "予習問題" + (currentPlaying ? " - " + currentPlaying.id : "")
+              ? "問題" + (currentPlaying ? " - " + currentPlaying.id + " " : "")
               : isFukushu &&
-                "復習問題" + (currentPlaying ? " - " + currentPlaying.id : "")}
+                "問題" +
+                  (currentPlaying ? " - " + currentPlaying.id + " " : "")}{" "}
+          </Text>
+          <Text
+            bg={isYoshu ? "blue.50" : isFukushu && "red.50"}
+            fontSize="lg"
+            p={2}
+            ps={3}
+            pe={5}
+            borderLeft="1px solid lightgray"
+          >
+            {" "}
+          {!isNaN(duration) ? " " + formatTime(duration) : " 00:00"}
           </Text>
           {!isMax ? (
             <Box
@@ -126,6 +150,7 @@ const TopBar = ({
             </Box>
           )}
         </ButtonGroup>
+        <Spacer />
         <Spacer />
         <VolumeControl isYoshu={isYoshu} isFukushu={isFukushu} />
       </Flex>

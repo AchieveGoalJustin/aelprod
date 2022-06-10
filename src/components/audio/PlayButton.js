@@ -4,7 +4,22 @@ import { Box, Flex } from "@chakra-ui/react";
 
 import { PlayBtn } from "../icons/PlayBtn";
 
+import { useState, useEffect } from "react";
+
 const PlayButton = ({ handlePlayerButton }) => {
+  const [key, setKey] = useState();
+
+  useEffect(() => {
+    document.addEventListener("keydown", (e) => setKey(e.key));
+    return () => document.removeEventListener("keydown", (e) => setKey(e.key));
+  });
+
+  useEffect(() => {
+    if (key === " ") {
+      handlePlayerButton();
+    }
+  }, [key]);
+
   return (
     <Box
       bg="white"

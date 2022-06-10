@@ -4,7 +4,22 @@ import { Box, Flex } from "@chakra-ui/react";
 
 import { PauseBtn } from "../icons/PauseBtn";
 
+import { useEffect, useState } from "react";
+
 const PauseButton = ({ handlePlayerButton }) => {
+  const [key, setKey] = useState();
+
+  useEffect(() => {
+    document.addEventListener("keydown", (e) => setKey(e.key));
+    return () => document.removeEventListener("keydown", (e) => setKey(e.key));
+  });
+
+  useEffect(() => {
+    if (key === " ") {
+      handlePlayerButton();
+    }
+  }, [key]);
+
   return (
     <Box
       bg="white"

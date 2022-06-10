@@ -12,7 +12,6 @@ export function requireAuthentication(gssp) {
       if (jwt) {
         try {
           const decoded = verify(jwt, secret);
-          console.log(decoded);
           if (decoded.courses.includes("ADM")) {
             return {
               redirect: {

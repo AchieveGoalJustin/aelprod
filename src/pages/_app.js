@@ -4,6 +4,7 @@ import { SessionProvider } from "../context/SessionContext";
 import { AdminProvider } from "../context/AdminContext";
 import { DataProvider } from "../context/DataContext";
 import { VideoProvider } from "../context/VideoContext";
+import { AudioPlayerProvider } from "../context/AudioPlayerContext";
 import { extendTheme } from "@chakra-ui/react";
 import Head from "next/head";
 
@@ -61,17 +62,19 @@ function MyApp({ Component, pageProps }) {
           rel="stylesheet"
         />
       </Head>
-      <CourseProvider>
-        <VideoProvider>
-          <SessionProvider>
-            <AdminProvider>
-              <DataProvider>
-                <Component {...pageProps} />
-              </DataProvider>
-            </AdminProvider>
-          </SessionProvider>
-        </VideoProvider>
-      </CourseProvider>
+      <AudioPlayerProvider>
+        <CourseProvider>
+          <VideoProvider>
+            <SessionProvider>
+              <AdminProvider>
+                <DataProvider>
+                  <Component {...pageProps} />
+                </DataProvider>
+              </AdminProvider>
+            </SessionProvider>
+          </VideoProvider>
+        </CourseProvider>
+      </AudioPlayerProvider>
     </ChakraProvider>
   );
 }

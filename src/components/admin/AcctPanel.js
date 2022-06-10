@@ -26,10 +26,40 @@ import DeleteAcct from "./DeleteAcct";
 
 import AdminContext from "../../context/AdminContext";
 
+import DataBox from "./layout/DataBox";
+
 const AcctPanel = () => {
+  const { schoolId } = useContext(AdminContext);
+
+  const [allAccounts, setAllAccounts] = useState([]);
+  const [filteredAccounts, setFilteredAccounts] = useState([]);
+
+  const filterAccounts = (accounts, id) => {
+    return accounts.filter((account) => account.schoolAccountsId === id);
+  };
+
+  useEffect(() => {
+    const getAccountData = async () => {
+      const data = await API.graphql(graphqlOperation(listAccounts));
+      const filtered = filterAccounts(data.data.listAccounts.items, schoolId);
+      setAllAccounts(data.data.listAccounts.items);
+      filtered.forEach((item) => {
+        delete item.users;
+      });
+      setFilteredAccounts(filtered);
+    };
+
+    getAccountData();
+  }, []);
+
   return (
     <Container p={5} mx={"auto"} boxShadow={"md"} bgColor="white">
-      <Heading>I am account</Heading>
+      <Heading>Accounts</Heading>
+      {filteredAccounts.map((account) => {
+        return (
+          <DataBox title={"Account Number: " + account.number} data={account} />
+        );
+      })}
     </Container>
   );
   //   const { schoolId, setSchoolId } = useContext(AdminContext);

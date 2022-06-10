@@ -10,6 +10,8 @@ import {
   Text,
   Tooltip,
   Spinner,
+  SkeletonText,
+  SkeletonCircle,
 } from "@chakra-ui/react";
 
 import AudioPlayerContext from "../../context/AudioPlayerContext";
@@ -46,45 +48,62 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
   const { audioLevel } = useContext(AudioPlayerContext);
 
   useEffect(() => {
-    setIsPlaying(false);
-    setIsMax(false);
-    setMax(currentData.length - 1);
-    setDataIndex(0);
-  }, [currentData]);
+    if (isNaN(duration)) {
+      debugger;
+    }
+  });
 
   useEffect(() => {
-    if (currentTime >= duration) {
-      setIsPlaying(false);
+    if (!isNaN(audioPlayer?.current?.duration)) {
+      const seconds = Math.floor(audioPlayer.current.duration);
+      setDuration(seconds);
+      setSliderMax(seconds);
+    }
+    console.log("source", audioPlayer.current.src);
+    console.log("duration", audioPlayer.current.duration);
+  }, [audioPlayer?.current?.duration]);
+
+  useEffect(() => {
+    if (duration !== 0) {
+      if (currentTime >= duration) {
+        setIsPlaying(false);
+      }
     }
   }, [currentTime]);
 
+  //Setting and Manipulating Data
+
+  //Load data on component load
   useEffect(() => {
     setYoshuData(formatAudioData(audioData.予習, videoData, courseData));
     setFukushuData(formatAudioData(audioData.復習, videoData, courseData));
   }, []);
 
-  useEffect(() => {
-    if (isYoshu) {
-      setCurrentData(yoshuData);
-    } else if (isFukushu) {
-      setCurrentData(fukushuData);
-    }
-  }, [isFukushu, isYoshu]);
-
-  useEffect(() => {
-    setCurrentPlaying(currentData[dataIndex]);
-  }, [dataIndex]);
-
+  //Set initial data state
   useEffect(() => {
     setCurrentData(yoshuData);
     setCurrentPlaying(yoshuData[0]);
   }, [yoshuData, fukushuData]);
 
+  //Set data upon change in data index
   useEffect(() => {
-    const seconds = Math.floor(audioPlayer.current.duration);
-    setDuration(seconds);
-    setSliderMax(seconds);
-  }, [currentPlaying]);
+    setCurrentPlaying(currentData[dataIndex]);
+  }, [dataIndex]);
+
+  useEffect(() => {
+    setIsPlaying(false);
+    setDataIndex(0);
+    setCurrentPlaying(currentData[0]);
+    setIsMax(false);
+    setMax(currentData.length - 1);
+  }, [currentData]);
+
+  // useEffect(() => {
+  //   console.log(audioPlayer.current.src);
+  //   const seconds = Math.floor(audioPlayer.current.duration);
+  //   setDuration(seconds);
+  //   setSliderMax(seconds);
+  // }, [audioPlayer?.current?.src]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -94,18 +113,17 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
           console.log("tick");
           setCurrentTime(audioPlayer?.current?.currentTime);
           setSliderValue(audioPlayer?.current?.currentTime);
-        }, 1)
+        }, 10)
       );
-    } else {
+    } else if (!isPlaying) {
       audioPlayer.current.pause();
       clearInterval(loop);
     }
   }, [isPlaying]);
 
   useEffect(() => {
-    console.log(audioPlayer.current.readyState);
-    if (audioPlayer.current.readyState === 4) {
-      const seconds = Math.floor(audioPlayer.current.duration);
+    const seconds = Math.floor(audioPlayer.current.duration);
+    if (!isNaN(seconds) && seconds !== undefined) {
       setDuration(seconds);
       setSliderMax(seconds);
     }
@@ -131,7 +149,7 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
 
   const formatAudioData = (audioData, videoData, courseData) => {
     const formatted = audioData.map((file) => {
-      const url = `${process.env.NEXT_PUBLIC_EK3_ROOT}/${courseData}/${courseData}L/${file.slug}/D${videoData.day}${file.slug}${file.id}.wav`;
+      const url = `${process.env.NEXT_PUBLIC_EK3_ROOT}/${courseData}/${courseData}L/${file.slug}/D${videoData.day}${file.slug}${file.id}.mp3`;
       return { ...file, url: url };
     });
     console.log(formatted);
@@ -157,9 +175,9 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
   };
 
   const handleQuestionType = () => {
+    setIsPlaying(false);
     setCurrentTime(0);
     setDuration(0);
-    setIsPlaying(false);
     setIsYoshu(!isYoshu);
     setIsFukushu(!isFukushu);
 
@@ -190,9 +208,10 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
     } else if (dataIndex + 1 === max) {
       setIsMax(true);
     }
+    setDuration(0);
+    setCurrentTime(0);
     setIsPlaying(false);
     setDataIndex((dataIndex) => dataIndex + 1);
-    console.log(dataIndex);
   };
 
   return (
@@ -239,9 +258,6 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
             alignItems={"center"}
           >
             <Text>{currentTime ? formatTime(currentTime) : "00:00"}</Text>
-            <Text fontStyle={"italic"} fontSize="sm" fontWeight={"normal"}>
-              {duration ? formatTime(duration) : "00:00"}
-            </Text>
           </Flex>
           <Slider
             value={pauseSliderValue ? undefined : currentTime}
@@ -285,13 +301,15 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
           <audio
             ref={audioPlayer}
             src={currentPlaying ? currentPlaying.url : ""}
-            preload="metadata"
+            // preload="metadata"
           ></audio>
           <Text fontWeight="bold" bg="white" borderRadius="md" p={2}>
-            {!isNaN(duration) ? (
+            {duration !== 0 && !isNaN(duration) ? (
               "-" + formatTime(duration - currentTime)
             ) : (
-              <Spinner size="sm" />
+              <Box>
+                <SkeletonText noOfLines={1} w={6} fontSize="md" />
+              </Box>
             )}
           </Text>
         </Flex>

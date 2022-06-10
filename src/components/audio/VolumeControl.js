@@ -24,10 +24,6 @@ import {
 } from "react-icons/io5";
 
 const VolumeControl = ({ isYoshu, isFukushu }) => {
-  const [vol, setVol] = useState(0);
-
-  useEffect(() => {});
-
   const { audioLevel, setAudioLevel } = useContext(AudioPlayerContext);
 
   const setVolIcon = () => {

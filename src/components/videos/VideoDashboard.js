@@ -11,8 +11,6 @@ const VideoDashboard = () => {
   const { courseVideoList } = useContext(VideoContext);
   const { currentCourse } = useContext(CourseContext);
 
-  console.log(currentCourse);
-
   const deconstructedVideoObj =
     courseVideoList[Object.keys(courseVideoList)[0]];
 
@@ -30,8 +28,6 @@ const VideoDashboard = () => {
 
   //Isolate video data
   const getVideoMetaData = (videoObj, courseObj) => {
-    console.log("From geVideoMetaData");
-    console.log(courseObj);
     let returnData = {};
     Object.entries(videoObj).forEach((key) => {
       if (key[0] === "videoContent") {

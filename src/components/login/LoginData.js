@@ -97,7 +97,6 @@ const LoginData = ({ auth }) => {
     try {
       const authawait = await authenticate(credentials);
     } catch (err) {
-      console.log(err);
     }
   };
 

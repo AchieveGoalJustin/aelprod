@@ -7,9 +7,11 @@ import VideoScroller from "../videos/VideoScroller";
 import { useContext } from "react";
 
 import { Flex, Heading } from "@chakra-ui/react";
+import PlayerScaffold from "../audio/PlayerScaffold";
 
 const VideoDescriptionBox = () => {
-  const { currentVideo } = useContext(VideoContext);
+  const { currentVideo, courseVideoList } = useContext(VideoContext);
+  const courseData = courseVideoList[Object.keys(courseVideoList)[0]].testid;
 
   return (
     <Flex p={5} w="100%" justifyContent={"space-around"}>
@@ -19,6 +21,13 @@ const VideoDescriptionBox = () => {
             Day {currentVideo.day} - {currentVideo.title}
           </Heading>
           <VideoScroller />
+          {currentVideo.listening && (
+            <PlayerScaffold
+              courseData={courseData}
+              videoData={currentVideo}
+              audioData={currentVideo.listening}
+            />
+          )}
         </Flex>
       </Flex>
     </Flex>
