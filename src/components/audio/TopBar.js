@@ -21,9 +21,12 @@ const TopBar = ({
   currentPlaying,
   isYoshu,
   isFukushu,
-  handleQuestionType,
+  handleQuestionTypeYS,
+  handleQuestionTypeFS,
   handleQuestionNumberLeft,
   handleQuestionNumberRight,
+  fukushuOnly,
+  yoshuOnly,
 }) => {
   return (
     <Flex alignItems="center" ps={2}>
@@ -32,26 +35,30 @@ const TopBar = ({
         width="100%
         "
       >
-        <ButtonGroup size="md" isAttached boxShadow="lg">
-          <Button
-            outline={isYoshu && "2px solid blue"}
-            isDisabled={isYoshu && true}
-            color="white"
-            bg="blue.400"
-            onClick={handleQuestionType}
-          >
-            予習
-          </Button>
-          <Button
-            outline={isFukushu && "2px solid red"}
-            isDisabled={isFukushu && true}
-            color="white"
-            bg="red.400"
-            onClick={handleQuestionType}
-          >
-            復習
-          </Button>
-        </ButtonGroup>
+        {fukushuOnly || yoshuOnly ? (
+          ""
+        ) : (
+          <ButtonGroup size="md" isAttached boxShadow="lg">
+            <Button
+              outline={isYoshu && "2px solid blue"}
+              isDisabled={isYoshu && true}
+              color="white"
+              bg="blue.400"
+              onClick={handleQuestionTypeYS}
+            >
+              予習
+            </Button>
+            <Button
+              outline={isFukushu && "2px solid red"}
+              isDisabled={isFukushu && true}
+              color="white"
+              bg="red.400"
+              onClick={handleQuestionTypeFS}
+            >
+              復習
+            </Button>
+          </ButtonGroup>
+        )}
         <Spacer />
         <Heading
           color={isYoshu ? "blue.800" : isFukushu && "red.800"}
@@ -117,7 +124,7 @@ const TopBar = ({
             borderLeft="1px solid lightgray"
           >
             {" "}
-          {!isNaN(duration) ? " " + formatTime(duration) : " 00:00"}
+            {!isNaN(duration) ? " " + formatTime(duration) : " 00:00"}
           </Text>
           {!isMax ? (
             <Box

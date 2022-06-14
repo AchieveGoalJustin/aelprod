@@ -1,7 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 #test pages
-test/
+src/components/test
+
+#deprecated files
+.deprecated
 
 # dependencies
 /node_modules

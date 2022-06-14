@@ -9,9 +9,7 @@ import {
   SliderThumb,
   Text,
   Tooltip,
-  Spinner,
   SkeletonText,
-  SkeletonCircle,
 } from "@chakra-ui/react";
 
 import AudioPlayerContext from "../../context/AudioPlayerContext";
@@ -19,6 +17,7 @@ import AudioPlayerContext from "../../context/AudioPlayerContext";
 import PlayButton from "./PlayButton";
 import PauseButton from "./PauseButton";
 import TopBar from "./TopBar";
+import VideoContext from "../../context/VideoContext";
 
 const PlayerScaffold = ({ audioData, videoData, courseData }) => {
   const [duration, setDuration] = useState(0);
@@ -36,6 +35,8 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
   const [isYoshu, setIsYoshu] = useState(true);
   const [yoshuData, setYoshuData] = useState([]);
   const [fukushuData, setFukushuData] = useState([]);
+  const [fukushuOnly, setFukushuOnly] = useState(false);
+  const [yoshuOnly, setYoshuOnly] = useState(false);
 
   const [currentPlaying, setCurrentPlaying] = useState([]);
   const [currentData, setCurrentData] = useState([]);
@@ -46,6 +47,7 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
   const audioPlayer = useRef();
 
   const { audioLevel } = useContext(AudioPlayerContext);
+  const { currentVideo } = useContext(VideoContext);
 
   useEffect(() => {
     if (isNaN(duration)) {
@@ -75,14 +77,56 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
 
   //Load data on component load
   useEffect(() => {
-    setYoshuData(formatAudioData(audioData.予習, videoData, courseData));
-    setFukushuData(formatAudioData(audioData.復習, videoData, courseData));
+    if (audioData.予習) {
+      setYoshuData(formatAudioData(audioData?.予習, videoData, courseData));
+    }
+    if (audioData.復習) {
+      setFukushuData(formatAudioData(audioData?.復習, videoData, courseData));
+    }
+    if (audioData.予習 === undefined) {
+      setCurrentData(fukushuData);
+      setFukushuOnly(true);
+      setIsFukushu(true);
+      setIsYoshu(false);
+    }
   }, []);
+
+  useEffect(() => {
+    if (audioData.予習 && audioData.復習) {
+      setYoshuOnly(false);
+      setFukushuOnly(false);
+    }
+    if (audioData.予習) {
+      setYoshuData(formatAudioData(audioData?.予習, videoData, courseData));
+    }
+    if (audioData.復習) {
+      setFukushuData(formatAudioData(audioData?.復習, videoData, courseData));
+    }
+    if (audioData.予習) {
+      setIsYoshu(true);
+      setIsFukushu(false);
+      setCurrentData(yoshuData);
+    } else if (!audioData.予習) {
+      setIsFukushu(true);
+      setIsYoshu(false);
+      setCurrentData(fukushuData);
+      setFukushuOnly(true);
+    }
+    setCurrentTime(0);
+    console.log("Video change data:");
+    console.log(currentData);
+  }, [currentVideo]);
 
   //Set initial data state
   useEffect(() => {
-    setCurrentData(yoshuData);
-    setCurrentPlaying(yoshuData[0]);
+    if (audioData.予習) {
+      setCurrentData(yoshuData);
+      setCurrentPlaying(yoshuData[0]);
+    } else if (!audioData.予習) {
+      setCurrentData(fukushuData);
+      setCurrentPlaying(fukushuData[0]);
+      setFukushuOnly(true);
+    }
   }, [yoshuData, fukushuData]);
 
   //Set data upon change in data index
@@ -148,6 +192,7 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
   };
 
   const formatAudioData = (audioData, videoData, courseData) => {
+    console.log(audioData);
     const formatted = audioData.map((file) => {
       const url = `${process.env.NEXT_PUBLIC_EK3_ROOT}/${courseData}/${courseData}L/${file.slug}/D${videoData.day}${file.slug}${file.id}.mp3`;
       return { ...file, url: url };
@@ -174,22 +219,27 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
     setPauseSliderValue(false);
   };
 
-  const handleQuestionType = () => {
+  const handleQuestionTypeYS = () => {
     setIsPlaying(false);
     setCurrentTime(0);
     setDuration(0);
-    setIsYoshu(!isYoshu);
-    setIsFukushu(!isFukushu);
+    setIsYoshu(true);
+    setIsFukushu(false);
+    setCurrentData(yoshuData);
+    setCurrentPlaying(yoshuData[0]);
+    setThumbColor("blue.500");
+  };
 
-    if (isYoshu) {
-      setThumbColor("blue.500");
-      setCurrentData(yoshuData);
-      setCurrentPlaying(yoshuData[0]);
-    } else if (isFukushu) {
-      setThumbColor("red.500");
-      setCurrentData(fukushuData);
-      setCurrentPlaying(fukushuData[0]);
-    }
+  const handleQuestionTypeFS = () => {
+    setIsPlaying(false);
+    setCurrentTime(0);
+    setDuration(0);
+    setIsYoshu(false);
+    setIsFukushu(true);
+
+    setThumbColor("red.500");
+    setCurrentData(fukushuData);
+    setCurrentPlaying(fukushuData[0]);
   };
 
   const handleQuestionNumberLeft = () => {
@@ -230,12 +280,15 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
         currentPlaying={currentPlaying}
         currentData={currentData}
         yoshuData={yoshuData}
+        yoshuOnly={yoshuOnly}
         fukushuData={fukushuData}
+        fukushuOnly={fukushuOnly}
         formatTime={formatTime}
         duration={duration}
         isYoshu={isYoshu}
         isFukushu={isFukushu}
-        handleQuestionType={handleQuestionType}
+        handleQuestionTypeYS={handleQuestionTypeYS}
+        handleQuestionTypeFS={handleQuestionTypeFS}
         handleQuestionNumberLeft={handleQuestionNumberLeft}
         handleQuestionNumberRight={handleQuestionNumberRight}
         audioData={audioData}
@@ -303,15 +356,15 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
             src={currentPlaying ? currentPlaying.url : ""}
             // preload="metadata"
           ></audio>
-          <Text fontWeight="bold" bg="white" borderRadius="md" p={2}>
-            {duration !== 0 && !isNaN(duration) ? (
-              "-" + formatTime(duration - currentTime)
-            ) : (
-              <Box>
-                <SkeletonText noOfLines={1} w={6} fontSize="md" />
-              </Box>
-            )}
-          </Text>
+          {duration !== 0 && !isNaN(duration) ? (
+            <Text fontWeight="bold" bg="white" borderRadius="md" p={2}>
+              {"-" + formatTime(duration - currentTime)}
+            </Text>
+          ) : (
+            <Box p={4} bg={"white"} borderRadius="md">
+              <SkeletonText noOfLines={1} w={6} fontSize="md" />
+            </Box>
+          )}
         </Flex>
       </Flex>
     </Box>
