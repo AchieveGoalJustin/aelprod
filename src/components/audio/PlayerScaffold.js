@@ -49,11 +49,11 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
   const { audioLevel } = useContext(AudioPlayerContext);
   const { currentVideo } = useContext(VideoContext);
 
-  useEffect(() => {
-    if (isNaN(duration)) {
-      debugger;
-    }
-  });
+  // useEffect(() => {
+  //   if (isNaN(duration)) {
+  //     debugger;
+  //   }
+  // });
 
   useEffect(() => {
     if (!isNaN(audioPlayer?.current?.duration)) {
@@ -61,8 +61,6 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
       setDuration(seconds);
       setSliderMax(seconds);
     }
-    console.log("source", audioPlayer.current.src);
-    console.log("duration", audioPlayer.current.duration);
   }, [audioPlayer?.current?.duration]);
 
   useEffect(() => {
@@ -113,8 +111,6 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
       setFukushuOnly(true);
     }
     setCurrentTime(0);
-    console.log("Video change data:");
-    console.log(currentData);
   }, [currentVideo]);
 
   //Set initial data state
@@ -142,19 +138,11 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
     setMax(currentData.length - 1);
   }, [currentData]);
 
-  // useEffect(() => {
-  //   console.log(audioPlayer.current.src);
-  //   const seconds = Math.floor(audioPlayer.current.duration);
-  //   setDuration(seconds);
-  //   setSliderMax(seconds);
-  // }, [audioPlayer?.current?.src]);
-
   useEffect(() => {
     if (isPlaying) {
       audioPlayer.current.play();
       setLoop(
         setInterval(() => {
-          console.log("tick");
           setCurrentTime(audioPlayer?.current?.currentTime);
           setSliderValue(audioPlayer?.current?.currentTime);
         }, 10)
@@ -192,12 +180,11 @@ const PlayerScaffold = ({ audioData, videoData, courseData }) => {
   };
 
   const formatAudioData = (audioData, videoData, courseData) => {
-    console.log(audioData);
     const formatted = audioData.map((file) => {
       const url = `${process.env.NEXT_PUBLIC_EK3_ROOT}/${courseData}/${courseData}L/${file.slug}/D${videoData.day}${file.slug}${file.id}.mp3`;
       return { ...file, url: url };
     });
-    console.log(formatted);
+
     return formatted;
   };
 

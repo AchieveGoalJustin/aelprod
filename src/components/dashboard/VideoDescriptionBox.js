@@ -12,8 +12,6 @@ import PlayerScaffold from "../audio/PlayerScaffold";
 const VideoDescriptionBox = () => {
   const { currentVideo, courseVideoList } = useContext(VideoContext);
   const courseData = courseVideoList[Object.keys(courseVideoList)[0]].testid;
-  console.log("VC audio");
-  console.log(currentVideo.listening);
 
   return (
     <Flex p={5} w="100%" justifyContent={"space-around"}>

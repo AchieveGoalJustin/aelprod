@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 import { ChakraProvider } from "@chakra-ui/react";
 import { CourseProvider } from "../context/CourseContext";
 import { SessionProvider } from "../context/SessionContext";
@@ -5,22 +7,17 @@ import { AdminProvider } from "../context/AdminContext";
 import { DataProvider } from "../context/DataContext";
 import { VideoProvider } from "../context/VideoContext";
 import { AudioPlayerProvider } from "../context/AudioPlayerContext";
+
+import SiteProgBar from "../components/loaders/SiteProgBar";
+
 import { extendTheme } from "@chakra-ui/react";
+
+import Router from "next/router";
 import Head from "next/head";
 
-// import AWSAppSyncClient, { AUTH_TYPE } from 'aws-appsync';
 import { Amplify } from "aws-amplify";
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
-
-// const client = new AWSAppSyncClient({
-//   url: awsconfig.aws_appsync_graphqlEndpoint,
-//   region: awsconfig.aws_appsync_region,
-//   auth: {
-//     type: AUTH_TYPE.API_KEY,
-//     apiKey: awsconfig.aws_appsync_apiKey,
-//   },
-// });
 
 const theme = extendTheme({
   colors: {
@@ -44,13 +41,23 @@ const theme = extendTheme({
 });
 
 function MyApp({ Component, pageProps }) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  Router.events.on("routeChangeStart", () => {
+    if (Router.pathname !== `${process.env.PATH_ROOT}/user/profile`) {
+      setIsLoading(true);
+    }
+  });
+  Router.events.on("routeChangeComplete", () => setIsLoading(false));
+  Router.events.on("routeChangeError", () => setIsLoading(false));
+
+  useEffect(() => {
+    console.log(isLoading);
+  }, [isLoading]);
+
   return (
     <ChakraProvider theme={theme}>
       <Head>
-        {/* <style>
-          @import
-          url("https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@100;300;400;500;700;800;900&display=swap");
-        </style> */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -62,19 +69,23 @@ function MyApp({ Component, pageProps }) {
           rel="stylesheet"
         />
       </Head>
-      <AudioPlayerProvider>
-        <CourseProvider>
-          <VideoProvider>
-            <SessionProvider>
-              <AdminProvider>
-                <DataProvider>
-                  <Component {...pageProps} />
-                </DataProvider>
-              </AdminProvider>
-            </SessionProvider>
-          </VideoProvider>
-        </CourseProvider>
-      </AudioPlayerProvider>
+      {isLoading ? (
+        <SiteProgBar />
+      ) : (
+        <AudioPlayerProvider>
+          <CourseProvider>
+            <VideoProvider>
+              <SessionProvider>
+                <AdminProvider>
+                  <DataProvider>
+                    <Component {...pageProps} />
+                  </DataProvider>
+                </AdminProvider>
+              </SessionProvider>
+            </VideoProvider>
+          </CourseProvider>
+        </AudioPlayerProvider>
+      )}
     </ChakraProvider>
   );
 }

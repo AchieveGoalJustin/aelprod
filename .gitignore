@@ -2,6 +2,7 @@
 
 #test pages
 src/components/test
+src/pages/test
 
 #deprecated files
 .deprecated

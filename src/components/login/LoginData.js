@@ -96,8 +96,7 @@ const LoginData = ({ auth }) => {
     const credentials = { school, account, username, password };
     try {
       const authawait = await authenticate(credentials);
-    } catch (err) {
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
