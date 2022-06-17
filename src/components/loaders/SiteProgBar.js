@@ -17,25 +17,14 @@ const SiteProgBar = () => {
   const [barValue, setBarValue] = useState(0);
   const [showBar, setShowBar] = useState(false);
 
-  useEffect(() => {
-    setTimer(
-      setInterval(() => {
-        setBarValue((barValue) => barValue + 1);
-      }, 50)
-    );
-  }, []);
-
-  useEffect(() => {
-    if (barValue === 100) {
-      clearInterval(timer);
-    }
-  }, [barValue]);
-
   return (
     <Box h={"100vh"} w={"100vw"} pt={"20vh"}>
       <Container>
         <VStack spacing={6}>
-          <Image src="/aellogofull.png" priority={"true"} />
+          <Image
+            src={`${process.env.NEXT_PUBLIC_BRANDING_ROOT}/logo/aellogofull.png`}
+            priority={"true"}
+          />
           {/* <Image src="/AELLogoShadowless.png" mb={55} /> */}
           <Heading fontWeight="bold" textAlign="center" size="lg">
             少々お待ちください
