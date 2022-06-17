@@ -18,11 +18,11 @@ const Navbar = ({ username }) => {
   };
 
   const user = [
-    {
-      text: "プロフィール",
-      url: `${process.env.NEXT_PUBLIC_PATH_ROOT}/user/dashboard/profile/`,
-      key: 1,
-    },
+    // {
+    //   text: "プロフィール",
+    //   url: `${process.env.NEXT_PUBLIC_PATH_ROOT}/user/dashboard/profile/`,
+    //   key: 1,
+    // },
     {
       text: "ダッシュボード",
       url: `${process.env.NEXT_PUBLIC_PATH_ROOT}/user/dashboard/`,
