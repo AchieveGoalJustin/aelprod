@@ -19,7 +19,7 @@ const UnderConstruction = () => {
       <Box minH={"100vh"} minW={"100vw"}>
         <Container mt={"10%"}>
           <Flex flexDir={"column"} alignItems={"center"}>
-            <Image src="/UnderConstruction.png" />
+            <Image src="/UnderConstruction.png" priority={true} />
             <Heading py={4}>準備中です。</Heading>
             <Text>
               申し訳ございませんが、只今このページは閲覧いただけません。

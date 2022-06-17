@@ -35,7 +35,7 @@ const SiteProgBar = () => {
     <Box h={"100vh"} w={"100vw"} pt={"20vh"}>
       <Container>
         <VStack spacing={6}>
-          <Image src="/AELLogoFUll4.svg" />
+          <Image src="/AELLogoFUll4.svg" priority={"true"} />
           {/* <Image src="/AELLogoShadowless.png" mb={55} /> */}
           <Heading fontWeight="bold" textAlign="center" size="lg">
             少々お待ちください
@@ -59,7 +59,12 @@ const SiteProgBar = () => {
                 />
               </Box>
             ) : (
-              <Image src="/Loader200px.svg" maxW={125} margin={"auto"} />
+              <Image
+                src="/Loader200px.svg"
+                maxW={125}
+                margin={"auto"}
+                priority={true}
+              />
             )}
           </Flex>
         </VStack>
