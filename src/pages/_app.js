@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { ChakraProvider } from "@chakra-ui/react";
 import { CourseProvider } from "../context/CourseContext";
@@ -50,10 +50,6 @@ function MyApp({ Component, pageProps }) {
   });
   Router.events.on("routeChangeComplete", () => setIsLoading(false));
   Router.events.on("routeChangeError", () => setIsLoading(false));
-
-  useEffect(() => {
-    console.log(isLoading);
-  }, [isLoading]);
 
   return (
     <ChakraProvider theme={theme}>

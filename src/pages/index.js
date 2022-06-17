@@ -5,7 +5,7 @@ import Head from "next/head";
 import { ChakraProvider } from "@chakra-ui/provider";
 import { extendTheme } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useToast, Spinner } from "@chakra-ui/react";
+import { useToast, Spinner, Flex, Spacer } from "@chakra-ui/react";
 
 import { requireAuthentication } from "../components/HOC/ProtectPath";
 
@@ -56,15 +56,18 @@ export default function Home({ msg, auth }) {
           <LoginBox auth={auth} />
         </ChakraProvider>
       ) : (
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200" 
-          color="blue.500"
-          size="xl"
-          mx="auto"
-          my="auto"
-        />
+        <Flex flexDir="column" alignItems="center" w="100%" h="100vh">
+          <Spacer />
+          <Spinner
+            m={"auto"}
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+          <Spacer />
+        </Flex>
       )}
     </>
   );

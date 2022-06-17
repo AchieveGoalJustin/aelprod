@@ -111,7 +111,6 @@ const userDashboard = ({ perm, username }) => {
       ) : (
         <Flex flexDir="column" alignItems="center" w="100%" h="100vh">
           <Spacer />
-          <Heading>ログアウトしています。</Heading>
           <Spinner
             m={"auto"}
             thickness="4px"
