@@ -12,7 +12,7 @@ import CourseContext from "../../context/CourseContext";
 import VideoContext from "../../context/VideoContext";
 
 const SignOutButton = () => {
-  const { setIsLogged } = useContext(SessionContext);
+  const { setIsLogged, setIsAdmin } = useContext(SessionContext);
   const {
     setCurrentCourse,
     setCurrentTest,
@@ -28,6 +28,7 @@ const SignOutButton = () => {
   } = useContext(VideoContext);
 
   const reinitContext = () => {
+    setIsAdmin(false);
     setCurrentCourse(courseContextInit.currentCourse);
     setCurrentTest(courseContextInit.currentTest);
     setCourseList(courseContextInit.courseList);

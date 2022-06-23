@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 
 const SiteProgBar = () => {
-  const [timer, setTimer] = useState(null);
   const [barValue, setBarValue] = useState(0);
   const [showBar, setShowBar] = useState(false);
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Container,
   VStack,
@@ -14,6 +14,8 @@ import {
   Icon,
 } from "@chakra-ui/react";
 
+import SessionContext from "../../context/SessionContext";
+
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 
 import { sign } from "jsonwebtoken";
@@ -28,6 +30,8 @@ import { useRouter } from "next/router";
 
 const LoginData = ({ auth }) => {
   const secret = process.env.NEXT_PUBLIC_AUTH_SK;
+
+  const { setIsAdmin } = useContext(SessionContext);
 
   const signToken = (user) => {
     const token = sign(
@@ -102,9 +106,8 @@ const LoginData = ({ auth }) => {
   useEffect(() => {
     if (authComplete === true) {
       if (userPerm.includes("ADM")) {
+        setIsAdmin(true);
         router.replace("/user/admin/gqladmin");
-      } else {
-        router.replace("/user/dashboard");
       }
     }
   }, [authComplete]);

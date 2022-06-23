@@ -27,8 +27,6 @@ import DeleteSchool from "./DeleteSchool";
 
 import AdminContext from "../../context/AdminContext";
 
-import PlayerScaffold from "../audio/PlayerScaffold";
-
 const SchoolPanel = () => {
   const { schoolId, setSchoolId, setAccountIsLoaded } =
     useContext(AdminContext);
@@ -167,7 +165,6 @@ const SchoolPanel = () => {
             Load Accounts for This School
           </Button>
         </Flex>
-        <PlayerScaffold />
       </Container>
     </>
   );

@@ -19,14 +19,6 @@ export function requireAuthentication(gssp) {
                 destination: "/user/admin/gqladmin",
               },
             };
-          } else {
-            verify(jwt, secret);
-            return {
-              redirect: {
-                permanent: false,
-                destination: "/user/dashboard",
-              },
-            };
           }
         } catch (err) {}
       }

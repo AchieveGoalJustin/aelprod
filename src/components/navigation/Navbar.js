@@ -23,11 +23,11 @@ const Navbar = ({ username }) => {
     //   url: `${process.env.NEXT_PUBLIC_PATH_ROOT}/user/dashboard/profile/`,
     //   key: 1,
     // },
-    {
-      text: "ダッシュボード",
-      url: `${process.env.NEXT_PUBLIC_PATH_ROOT}/user/dashboard/`,
-      key: 2,
-    },
+    // {
+    //   text: "ダッシュボード",
+    //   url: `${process.env.NEXT_PUBLIC_PATH_ROOT}/user/dashboard/`,
+    //   key: 2,
+    // },
   ];
 
   return (
@@ -43,6 +43,7 @@ const Navbar = ({ username }) => {
       boxShadow="md"
       position="static"
       p={3}
+      display={["none", "none", "flex", "flex"]}
     >
       <Flex
         w={["80%", "40%", "30%"]}
