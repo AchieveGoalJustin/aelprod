@@ -33,6 +33,8 @@ const AcctPanel = () => {
 
   const [allAccounts, setAllAccounts] = useState([]);
   const [filteredAccounts, setFilteredAccounts] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [currentAccount, setCurrentAccount] = useState(false);
 
   const filterAccounts = (accounts, id) => {
     return accounts.filter((account) => account.schoolAccountsId === id);
@@ -47,6 +49,7 @@ const AcctPanel = () => {
         delete item.users;
       });
       setFilteredAccounts(filtered);
+      setIsLoaded(true);
     };
 
     getAccountData();
@@ -55,11 +58,40 @@ const AcctPanel = () => {
   return (
     <Container p={5} mx={"auto"} boxShadow={"md"} bgColor="white">
       <Heading>Accounts</Heading>
-      {filteredAccounts.map((account) => {
+      <Select
+        mb={3}
+        placeholder="Select School"
+        onChange={(e) => {
+          isLoaded && console.log("target.value");
+          console.log(e.target.value);
+          console.log("filtered");
+          console.log(
+            filteredAccounts.filter(
+              (account) => e.target.value === account.id
+            )[0]
+          );
+          setCurrentAccount(
+            filteredAccounts.filter(
+              (account) => e.target.value === account.id
+            )[0]
+          );
+        }}
+        maxW={300}
+      >
+        {isLoaded &&
+          filteredAccounts.map((account) => {
+            return (
+              <option key={account.id} value={account.id}>
+                {account.number}
+              </option>
+            );
+          })}
+      </Select>
+      {/* {filteredAccounts.map((account) => {
         return (
           <DataBox title={"Account Number: " + account.number} data={account} />
         );
-      })}
+      })} */}
     </Container>
   );
   //   const { schoolId, setSchoolId } = useContext(AdminContext);
