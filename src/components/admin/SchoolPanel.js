@@ -28,7 +28,7 @@ import DeleteSchool from "./DeleteSchool";
 import AdminContext from "../../context/AdminContext";
 
 const SchoolPanel = () => {
-  const { schoolId, setSchoolId, setAccountIsLoaded } =
+  const { setSchoolId, setAccountIsLoaded, setUserListIsLoaded } =
     useContext(AdminContext);
 
   const [schoolList, setSchoolList] = useState("");
@@ -62,6 +62,7 @@ const SchoolPanel = () => {
 
   useEffect(() => {
     setAccountIsLoaded(false);
+    setUserListIsLoaded(false)
     currentSchool && setSchoolId(currentSchool.id);
   }, [isLoaded, currentSchool]);
 
@@ -87,7 +88,7 @@ const SchoolPanel = () => {
 
   return (
     <>
-      <Container p={5} mx={"auto"} boxShadow={"md"} bgColor="white">
+      <Box p={5} w="100%" boxShadow={"md"} bgColor="white">
         <Heading mb={3}>School</Heading>
         <Select
           mb={3}
@@ -165,7 +166,7 @@ const SchoolPanel = () => {
             Load Accounts for This School
           </Button>
         </Flex>
-      </Container>
+      </Box>
     </>
   );
 };

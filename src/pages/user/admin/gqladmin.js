@@ -3,29 +3,7 @@ import generator from "generate-password";
 
 import jwt from "jsonwebtoken";
 
-import { API, graphqlOperation } from "aws-amplify";
-import { listSchools, listUsers, listAccounts } from "../../../graphql/queries";
-import {
-  createUser,
-  createAccount,
-  createSchool,
-  updateUser,
-  updateAccount,
-  updateSchool,
-} from "../../../graphql/mutations";
-
-import {
-  Input,
-  Button,
-  Container,
-  Heading,
-  Text,
-  Box,
-  Flex,
-  Spacer,
-  Select,
-  FormLabel,
-} from "@chakra-ui/react";
+import { Grid, GridItem, Box } from "@chakra-ui/react";
 
 import { useState, useEffect, useContext } from "react";
 
@@ -33,12 +11,13 @@ import { requireAuthentication } from "../../../components/HOC/ProtectPath";
 
 import AcctPanel from "../../../components/admin/AcctPanel";
 import SchoolPanel from "../../../components/admin/SchoolPanel";
+import UserPanel from "../../../components/admin/UserPanel";
 import Navbar from "../../../components/navigation/Navbar";
 
 import AdminContext from "../../../context/AdminContext";
 
 const awsapi = (props) => {
-  const { accountIsLoaded } = useContext(AdminContext);
+  const { accountIsLoaded, userListIsLoaded } = useContext(AdminContext);
 
   //Rendering state variables
   const [render, setRender] = useState(true);
@@ -155,14 +134,22 @@ const awsapi = (props) => {
   return (
     <>
       <Navbar />
-      <Box minH="100vh" minW="100vw" bg="blue.300" py={"2%"}>
-        <Flex>
-          <Spacer />
-          <SchoolPanel />
-          <Spacer />
-          {accountIsLoaded ? <AcctPanel /> : ""}
-          <Spacer />
-        </Flex>
+      <Box minH="100vh" minW="100vw" bg="blue.300" p={"3%"}>
+        <Grid
+          templateColumns="repeat(2, 1fr)"
+          templateRows="repeat(2, 1fr)"
+          gap={5}
+        >
+          <GridItem colSpan={1}>
+            <SchoolPanel />
+          </GridItem>
+          <GridItem colSpan={1}>
+            {accountIsLoaded ? <AcctPanel /> : ""}
+          </GridItem>
+          <GridItem colSpan={2} pt={10}>
+            {userListIsLoaded ? <UserPanel /> : ""}
+          </GridItem>
+        </Grid>
       </Box>
     </>
     // <Container>

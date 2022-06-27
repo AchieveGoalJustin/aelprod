@@ -1,12 +1,9 @@
 import { useState } from "react";
 
 import { ChakraProvider } from "@chakra-ui/react";
-import { CourseProvider } from "../context/CourseContext";
 import { SessionProvider } from "../context/SessionContext";
 import { AdminProvider } from "../context/AdminContext";
 import { DataProvider } from "../context/DataContext";
-import { VideoProvider } from "../context/VideoContext";
-import { AudioPlayerProvider } from "../context/AudioPlayerContext";
 
 import SiteProgBar from "../components/loaders/SiteProgBar";
 
@@ -68,19 +65,13 @@ function MyApp({ Component, pageProps }) {
       {isLoading ? (
         <SiteProgBar />
       ) : (
-        <AudioPlayerProvider>
-          <CourseProvider>
-            <VideoProvider>
-              <SessionProvider>
-                <AdminProvider>
-                  <DataProvider>
-                    <Component {...pageProps} />
-                  </DataProvider>
-                </AdminProvider>
-              </SessionProvider>
-            </VideoProvider>
-          </CourseProvider>
-        </AudioPlayerProvider>
+        <SessionProvider>
+          <AdminProvider>
+            <DataProvider>
+              <Component {...pageProps} />
+            </DataProvider>
+          </AdminProvider>
+        </SessionProvider>
       )}
     </ChakraProvider>
   );

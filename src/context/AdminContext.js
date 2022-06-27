@@ -7,6 +7,8 @@ export const AdminProvider = ({ children }) => {
   const [accountId, setAccountId] = useState();
   const [userId, setUserId] = useState();
   const [accountIsLoaded, setAccountIsLoaded] = useState(false);
+  const [userList, setUserList] = useState([]);
+  const [userListIsLoaded, setUserListIsLoaded] = useState(false);
 
   return (
     <AdminContext.Provider
@@ -19,6 +21,10 @@ export const AdminProvider = ({ children }) => {
         setUserId,
         accountIsLoaded,
         setAccountIsLoaded,
+        userList,
+        setUserList,
+        userListIsLoaded,
+        setUserListIsLoaded,
       }}
     >
       {children}
