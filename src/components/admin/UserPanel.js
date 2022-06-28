@@ -15,14 +15,57 @@ import { useDisclosure } from "@chakra-ui/react";
 
 import UserTable from "./layout/UserTable";
 import CreateUser from "./CreateUser";
+import GenerateUsers from "./GenerateUsers";
+import DeleteUser from "./DeleteUser";
+import UpdateUser from "./UpdateUser";
 
 import AdminContext from "../../context/AdminContext";
 
 const UserPanel = () => {
+  useState(() => {
+    console.log(modalContent);
+  });
+
+  useState(() => {
+    console.log(modalContent);
+  }, [modalContent]);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { userList, accountId } = useContext(AdminContext);
+  const { userList, accountId, currentAccount } = useContext(AdminContext);
+
+  const [buttonEnabled, setButtonEnabled] = useState(false);
+  const [modalContent, setModalContent] = useState("");
   const [createUserActive, setCreateUserActive] = useState(false);
+
+  const showSelect = (e) => {
+    switch (e.target.value) {
+      case "delete":
+        setModalContent(<DeleteUser buttonKeyword="Delete" />);
+        setButtonEnabled(true);
+        break;
+      case "update":
+        setModalContent(<UpdateUser buttonKeyword="Update" />);
+        setButtonEnabled(true);
+        break;
+      case "generate":
+        setModalContent(<GenerateUsers buttonKeyword="Generate" />);
+        setButtonEnabled(true);
+        break;
+      case "create":
+        setModalContent(
+          <CreateUser
+            account={currentAccount}
+            userList={userList}
+            buttonKeyword="Create"
+          />
+        );
+        setButtonEnabled(true);
+        break;
+      default:
+        setButtonEnabled(false);
+    }
+  };
 
   return (
     <Box p="5" w="100%" maxH={"100vh"} boxShadow={"md"} bgColor="white">
@@ -31,21 +74,29 @@ const UserPanel = () => {
         <Spacer />
         <Flex me={5}>
           <Box me={5}>
-            <Select placeholder="Select Operation">
-              <option>{"Delete User(s)"}</option>
-              <option>{"Update User"}</option>
-              <option>{"Generate Users"}</option>
-              <option>{"Create User"}</option>
+            <Select
+              placeholder="Select Operation"
+              onChange={(e) => showSelect(e)}
+            >
+              <option value="delete">{"Delete User(s)"}</option>
+              <option value="update">{"Update User"}</option>
+              <option value="generate">{"Generate Users"}</option>
+              <option value="create">{"Create User"}</option>
             </Select>
           </Box>
-          <Button colorScheme={"green"} onClick={onOpen}>
+          <Button
+            colorScheme={"green"}
+            onClick={onOpen}
+            isDisabled={!buttonEnabled}
+          >
             Make Changes
           </Button>
         </Flex>
       </Flex>
       <UserTable data={userList} />
       <Modal isOpen={isOpen} onClose={onClose}>
-        <CreateUser accountId={accountId} />
+        {modalContent}
+        {/* <CreateUser account={currentAccount} userList={userList} /> */}
       </Modal>
     </Box>
   );

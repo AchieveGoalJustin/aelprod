@@ -26,12 +26,13 @@ const AcctPanel = () => {
     userList,
     userListIsLoaded,
     setUserListIsLoaded,
+    currentAccount,
+    setCurrentAccount,
   } = useContext(AdminContext);
 
   const [allAccounts, setAllAccounts] = useState([]);
   const [filteredAccounts, setFilteredAccounts] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [currentAccount, setCurrentAccount] = useState(false);
 
   useEffect(() => {
     const getAccountData = async () => {
@@ -89,8 +90,6 @@ const AcctPanel = () => {
       setUserListIsLoaded(true);
     }
   };
-
-  
 
   return (
     <Box p={5} boxShadow={"md"} bgColor="white" w="100%">

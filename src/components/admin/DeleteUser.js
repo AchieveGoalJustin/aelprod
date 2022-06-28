@@ -1,7 +1,13 @@
 import React from "react";
 
-const DeleteUser = () => {
-  return <div>DeleteUser</div>;
+import ModalFormInnerScaffold from "./forms/ModalFormInnerScaffold";
+
+const DeleteUser = ({ buttonKeyword }) => {
+  return (
+    <ModalFormInnerScaffold buttonKeyword={buttonKeyword}>
+      DeleteUser
+    </ModalFormInnerScaffold>
+  );
 };
 
 export default DeleteUser;

@@ -10,7 +10,6 @@ export function intToString(int, strSize) {
   } else {
     let strArray = Array.from(stringInt);
     const diff = strSize - currentLength;
-    console.log(diff);
     for (let i = diff; i > 0; i--) {
       strArray = ["0", ...strArray];
     }
