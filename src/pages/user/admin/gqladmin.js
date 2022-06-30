@@ -14,10 +14,16 @@ import SchoolPanel from "../../../components/admin/SchoolPanel";
 import UserPanel from "../../../components/admin/UserPanel";
 import Navbar from "../../../components/navigation/Navbar";
 
+import { UserFormProvider } from "../../../context/UserFormContext";
+
 import AdminContext from "../../../context/AdminContext";
+import UserFormContext from "../../../context/UserPanelContext";
+import { set } from "lodash";
 
 const awsapi = (props) => {
-  const { accountIsLoaded, userListIsLoaded } = useContext(AdminContext);
+  const { accountIsLoaded, userListIsLoaded, setUserListIsLoaded } =
+    useContext(AdminContext);
+  const { reloadUserPanel, setReloadUserPanel } = useContext(UserFormContext);
 
   //Rendering state variables
   const [render, setRender] = useState(true);
@@ -129,7 +135,24 @@ const awsapi = (props) => {
     }
   };
 
-  useEffect(() => {}, [selectedSchoolId]);
+  useEffect(() => {
+    console.log("reloadUserPanel triggered", reloadUserPanel);
+    if (reloadUserPanel) {
+      setUserListIsLoaded(false);
+      console.log("userListIsLoaded:", userListIsLoaded, "from page");
+    } else if (!reloadUserPanel) {
+      setUserListIsLoaded(true);
+      console.log("userListIsLoaded:", userListIsLoaded, "from page");
+    }
+  }, [reloadUserPanel]);
+
+  useEffect(() => {
+    if (userListIsLoaded) {
+      console.log("userList loaded");
+    } else if (!userListIsLoaded) {
+      console.log("userList not loaded");
+    }
+  }, [userListIsLoaded]);
 
   return (
     <>
@@ -137,7 +160,7 @@ const awsapi = (props) => {
       <Box minH="100vh" minW="100vw" bg="blue.300" p={"3%"}>
         <Grid
           templateColumns="repeat(2, 1fr)"
-          templateRows="repeat(2, 1fr)"
+          // templateRows="repeat(2, 1fr)"
           gap={5}
         >
           <GridItem colSpan={1}>
@@ -147,7 +170,13 @@ const awsapi = (props) => {
             {accountIsLoaded ? <AcctPanel /> : ""}
           </GridItem>
           <GridItem colSpan={2} pt={10}>
-            {userListIsLoaded ? <UserPanel /> : ""}
+            {userListIsLoaded ? (
+              <UserFormProvider>
+                <UserPanel />
+              </UserFormProvider>
+            ) : (
+              ""
+            )}
           </GridItem>
         </Grid>
       </Box>

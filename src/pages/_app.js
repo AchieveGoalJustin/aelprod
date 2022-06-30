@@ -4,6 +4,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { SessionProvider } from "../context/SessionContext";
 import { AdminProvider } from "../context/AdminContext";
 import { DataProvider } from "../context/DataContext";
+import { UserPanelProvider } from "../context/UserPanelContext";
 
 import SiteProgBar from "../components/loaders/SiteProgBar";
 
@@ -65,13 +66,15 @@ function MyApp({ Component, pageProps }) {
       {isLoading ? (
         <SiteProgBar />
       ) : (
-        <SessionProvider>
-          <AdminProvider>
-            <DataProvider>
-              <Component {...pageProps} />
-            </DataProvider>
-          </AdminProvider>
-        </SessionProvider>
+        <UserPanelProvider>
+          <SessionProvider>
+            <AdminProvider>
+              <DataProvider>
+                <Component {...pageProps} />
+              </DataProvider>
+            </AdminProvider>
+          </SessionProvider>
+        </UserPanelProvider>
       )}
     </ChakraProvider>
   );

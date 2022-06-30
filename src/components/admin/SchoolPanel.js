@@ -28,11 +28,16 @@ import DeleteSchool from "./DeleteSchool";
 import AdminContext from "../../context/AdminContext";
 
 const SchoolPanel = () => {
-  const { setSchoolId, setAccountIsLoaded, setUserListIsLoaded } =
-    useContext(AdminContext);
+  const {
+    setSchoolId,
+    setAccountIsLoaded,
+    setUserListIsLoaded,
+    setCurrentSchool,
+    currentSchool,
+    userListIsLoaded,
+  } = useContext(AdminContext);
 
   const [schoolList, setSchoolList] = useState("");
-  const [currentSchool, setCurrentSchool] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
   const [operationInput, setOperationInput] = useState("create");
   const [currentOperationComponent, setCurrentOperationComponent] = useState();
@@ -62,7 +67,9 @@ const SchoolPanel = () => {
 
   useEffect(() => {
     setAccountIsLoaded(false);
-    setUserListIsLoaded(false)
+    setUserListIsLoaded(false);
+    console.log("userListIsLoaded:", userListIsLoaded, "from schoolpanel");
+
     currentSchool && setSchoolId(currentSchool.id);
   }, [isLoaded, currentSchool]);
 

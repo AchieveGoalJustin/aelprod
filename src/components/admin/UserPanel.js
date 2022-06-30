@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import {
   Box,
@@ -22,14 +22,6 @@ import UpdateUser from "./UpdateUser";
 import AdminContext from "../../context/AdminContext";
 
 const UserPanel = () => {
-  useState(() => {
-    console.log(modalContent);
-  });
-
-  useState(() => {
-    console.log(modalContent);
-  }, [modalContent]);
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { userList, accountId, currentAccount } = useContext(AdminContext);
@@ -41,20 +33,32 @@ const UserPanel = () => {
   const showSelect = (e) => {
     switch (e.target.value) {
       case "delete":
-        setModalContent(<DeleteUser buttonKeyword="Delete" />);
+        setModalContent(
+          <DeleteUser onClose={onClose} buttonKeyword="Delete" />
+        );
         setButtonEnabled(true);
         break;
       case "update":
-        setModalContent(<UpdateUser buttonKeyword="Update" />);
+        setModalContent(
+          <UpdateUser onClose={onClose} buttonKeyword="Update" />
+        );
         setButtonEnabled(true);
         break;
       case "generate":
-        setModalContent(<GenerateUsers buttonKeyword="Generate" />);
+        setModalContent(
+          <GenerateUsers
+            onClose={onClose}
+            buttonKeyword="Generate"
+            account={currentAccount}
+            userList={userList}
+          />
+        );
         setButtonEnabled(true);
         break;
       case "create":
         setModalContent(
           <CreateUser
+            onClose={onClose}
             account={currentAccount}
             userList={userList}
             buttonKeyword="Create"
@@ -68,7 +72,7 @@ const UserPanel = () => {
   };
 
   return (
-    <Box p="5" w="100%" maxH={"100vh"} boxShadow={"md"} bgColor="white">
+    <Box p="5" w="100%" boxShadow={"md"} bgColor="white">
       <Flex>
         <Heading mb={"5"}>User Data:</Heading>
         <Spacer />

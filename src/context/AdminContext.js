@@ -29,6 +29,8 @@ export const AdminProvider = ({ children }) => {
         setUserListIsLoaded,
         currentAccount,
         setCurrentAccount,
+        currentSchool,
+        setCurrentSchool,
       }}
     >
       {children}

@@ -64,8 +64,9 @@ const AcctPanel = () => {
 
   useEffect(() => {
     setUserListIsLoaded(false);
+    console.log("userListIsLoaded:", userListIsLoaded, "from accountpanel");
     currentAccount && setAccountId(currentAccount.id);
-  }, [isLoaded, currentAccount]);
+  }, [isLoaded && currentAccount]);
 
   const filterAccounts = (accounts, id) => {
     return accounts.filter((account) => account.schoolAccountsId === id);

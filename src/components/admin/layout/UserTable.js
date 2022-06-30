@@ -14,11 +14,6 @@ import {
 } from "@chakra-ui/react";
 
 const UserTable = ({ data }) => {
-  useEffect(() => {
-    console.log("From table component:");
-    console.log(data);
-  }, []);
-
   const [deleteList, setDeleteList] = useState([]);
 
   const hanldeDeleteList = (e, id) => {
@@ -39,10 +34,10 @@ const UserTable = ({ data }) => {
             <Th>Select</Th>
           </Tr>
         </Thead>
-        {data.map((user) => {
-          return (
-            <Tbody key={user.id}>
-              <Tr>
+        <Tbody>
+          {data.map((user) => {
+            return (
+              <Tr key={user.id}>
                 <Td>{user.number}</Td>
                 <Td>{user.username}</Td>
                 <Td>{user.password}</Td>
@@ -57,9 +52,9 @@ const UserTable = ({ data }) => {
                   />
                 </Td>
               </Tr>
-            </Tbody>
-          );
-        })}
+            );
+          })}
+        </Tbody>
       </Table>
     </TableContainer>
   );
