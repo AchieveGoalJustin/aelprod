@@ -1,9 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import {
-  getRandomWord,
-  getRandomDigits,
-  getRandomPassword,
-} from "../../utils/passnounlist";
+import { getRandomPassword } from "../../utils/passnounlist";
 import * as parsers from "../../utils/database/numberParsers";
 
 import { FormLabel, Input, Text } from "@chakra-ui/react";
@@ -22,12 +18,10 @@ const GenerateUsers = ({ buttonKeyword, userList, account, onClose }) => {
   const [password, setPassword] = useState("");
   const [number, setNumber] = useState("");
   const [numberIsValid, setNumberIsValid] = useState(false);
-  const [usernameIsValid, setUsernameIsValid] = useState(false);
-  const [passwordIsValid, setPasswordIsValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   function checkFormIsValid() {
-    if (numberIsValid && passwordIsValid && usernameIsValid) {
+    if (numberIsValid) {
       setFormIsValid(true);
     }
   }
@@ -35,7 +29,7 @@ const GenerateUsers = ({ buttonKeyword, userList, account, onClose }) => {
   function checkNumberIsValid() {
     if (
       userNumbers.includes(parsers.stringToInt(number)) ||
-      number.length < 4 ||
+      number.length < 1 ||
       !parsers.stringToInt(number)
     ) {
       setNumberIsValid(false);
@@ -45,58 +39,36 @@ const GenerateUsers = ({ buttonKeyword, userList, account, onClose }) => {
     }
   }
 
-  function checkUsernameIsValid() {
-    if (username.length <= 0) {
-      setUsernameIsValid(false);
-      setFormIsValid(false);
-    } else {
-      setUsernameIsValid(true);
-    }
-  }
-
-  function checkPasswordIsValid() {
-    if (password.length <= 0) {
-      setPasswordIsValid(false);
-      setFormIsValid(false);
-    } else {
-      setPasswordIsValid(true);
-    }
-  }
-
-  const createNewUser = async (e) => {
+  const generateNewUsers = async (e) => {
     e.preventDefault();
 
-    let updatedAccount = await API.graphql(
-      graphqlOperation(updateAccount, {
-        input: { id: account.id, usercount: account.usercount + 1 },
-      })
-    );
+    // let updatedAccount = await API.graphql(
+    //   graphqlOperation(updateAccount, {
+    //     input: { id: account.id, usercount: account.usercount + 1 },
+    //   })
+    // );
 
-    let newUser = await API.graphql(
-      graphqlOperation(createUser, {
-        input: {
-          number: number,
-          password: password,
-          username: username,
-          accountUsersId: account.id,
-        },
-      })
-    );
+    // let newUser = await API.graphql(
+    //   graphqlOperation(createUser, {
+    //     input: {
+    //       number: number,
+    //       password: password,
+    //       username: username,
+    //       accountUsersId: account.id,
+    //     },
+    //   })
+    // );
   };
 
   useEffect(() => {
     checkNumberIsValid();
-    checkUsernameIsValid();
-    checkPasswordIsValid();
   }, [number, username, password]);
 
   useEffect(() => {
     checkFormIsValid();
-  }, [numberIsValid, passwordIsValid, usernameIsValid]);
+  }, [numberIsValid]);
 
   useEffect(() => {
-    console.log("getting random word");
-    console.log(getRandomWord());
     console.log(getRandomPassword(4));
   });
 
@@ -110,41 +82,16 @@ const GenerateUsers = ({ buttonKeyword, userList, account, onClose }) => {
       buttonKeyword={buttonKeyword}
       onClose={onClose}
     >
-      <FormLabel>Username</FormLabel>
+      <FormLabel>User Amount</FormLabel>
       <Input
         isInvalid={!usernameIsValid}
         type="text"
         value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        isDisabled={showPassword}
-      />
-      <FormLabel>Password</FormLabel>
-      <Input
-        isInvalid={!passwordIsValid}
-        type="text"
-        isDisabled={showPassword}
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <FormLabel>User Number</FormLabel>
-      <Input
-        type="text"
-        maxLength={4}
-        isInvalid={!numberIsValid}
-        errorBorderColor="red.300"
-        placeholder={
-          "Suggested: " + parsers.intToString(account.usercount + 1, 4)
-        }
-        onChange={(e) => {
-          setNumber(e.target.value);
-        }}
-        value={number}
+        onChange={(e) => setNumber(Math.floor(e.target.value))}
         isDisabled={showPassword}
       />
       {!numberIsValid ? (
-        <Text color="red">
-          Number must be 4 digits and not already be held by another user
-        </Text>
+        <Text color="red">Input must be a positive non-zero number.</Text>
       ) : (
         <></>
       )}

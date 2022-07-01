@@ -168,15 +168,15 @@ function getRandomIndex(array) {
   return random;
 }
 
-export function getRandomWord() {
+function getRandomWord() {
   return passNounlist[getRandomIndex(passNounlist)];
 }
 
-export function getRandomDigit() {
+function getRandomDigit() {
   return Math.floor(Math.random() * 10);
 }
 
-export function getRandomDigits(length) {
+function getRandomDigits(length) {
   let digits = "";
   for (let i = 0; i < length; i++) {
     digits += getRandomDigit().toString();
