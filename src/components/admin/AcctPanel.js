@@ -23,50 +23,38 @@ const AcctPanel = () => {
     setAccountId,
     accountId,
     setUserList,
-    userList,
-    userListIsLoaded,
     setUserListIsLoaded,
     currentAccount,
     setCurrentAccount,
+    retrieveUsers,
+    setRetrieveUsers,
   } = useContext(AdminContext);
 
   const [allAccounts, setAllAccounts] = useState([]);
   const [filteredAccounts, setFilteredAccounts] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  // const [retrieveUsers, setRetrieveUsers] = useState(false);
 
-  useEffect(() => {
-    const getAccountData = async () => {
-      const data = await API.graphql(graphqlOperation(listAccounts));
-      const filtered = filterAccounts(data.data.listAccounts.items, schoolId);
-      setAllAccounts(data.data.listAccounts.items);
-      filtered.forEach((item) => {
-        delete item.users;
-      });
-      setFilteredAccounts(filtered);
-      setIsLoaded(true);
-    };
-
-    getAccountData();
-  }, []);
-
-  useEffect(() => {
-    const getUserData = async () => {
-      const userData = await API.graphql(graphqlOperation(listUsers));
-      const filtered = filterUsers(userData.data.listUsers.items, accountId);
-      setUserList(filtered);
-      console.log(userList);
-    };
-
-    if (accountId) {
-      getUserData();
+  const getUserData = async () => {
+    const userData = await API.graphql(graphqlOperation(listUsers));
+    const filtered = filterUsers(userData.data.listUsers.items, accountId);
+    if (filtered) {
+      setUserListIsLoaded(true);
     }
-  }, [accountId]);
+    setUserList(filtered);
+  };
 
-  useEffect(() => {
-    setUserListIsLoaded(false);
-    console.log("userListIsLoaded:", userListIsLoaded, "from accountpanel");
-    currentAccount && setAccountId(currentAccount.id);
-  }, [isLoaded && currentAccount]);
+  const getAccountData = async () => {
+    const data = await API.graphql(graphqlOperation(listAccounts));
+    const filtered = filterAccounts(data.data.listAccounts.items, schoolId);
+    setAllAccounts(data.data.listAccounts.items);
+
+    filtered.forEach((item) => {
+      delete item.users;
+    });
+    setFilteredAccounts(filtered);
+    setIsLoaded(true);
+  };
 
   const filterAccounts = (accounts, id) => {
     return accounts.filter((account) => account.schoolAccountsId === id);
@@ -86,11 +74,27 @@ const AcctPanel = () => {
     );
   };
 
-  const handleLoadUsers = () => {
-    if (userList) {
-      setUserListIsLoaded(true);
+  useEffect(() => {
+    console.log(accountId);
+    setUserListIsLoaded(false);
+  }, [accountId]);
+
+  useEffect(() => {
+    getAccountData();
+  }, []);
+
+  useEffect(() => {
+    setUserListIsLoaded(false);
+    currentAccount && setAccountId(currentAccount.id);
+  }, [isLoaded && currentAccount]);
+
+  useEffect(() => {
+    if (retrieveUsers) {
+      setUserListIsLoaded(false);
+      getUserData();
+      setRetrieveUsers(false);
     }
-  };
+  }, [retrieveUsers]);
 
   return (
     <Box p={5} boxShadow={"md"} bgColor="white" w="100%">
@@ -106,6 +110,8 @@ const AcctPanel = () => {
             return (
               <option key={account.id} value={account.id}>
                 {account.number}
+                {() => setAccountId(account.id)}
+                {() => setRetrieveUsers(false)}
               </option>
             );
           })}
@@ -119,7 +125,7 @@ const AcctPanel = () => {
         <Spacer />
         <Button
           colorScheme={"blue"}
-          onClick={handleLoadUsers}
+          onClick={() => setRetrieveUsers(true)}
           isDisabled={!currentAccount ? true : false}
         >
           Load Users for This Account

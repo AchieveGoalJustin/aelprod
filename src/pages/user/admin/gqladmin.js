@@ -135,25 +135,6 @@ const awsapi = (props) => {
     }
   };
 
-  useEffect(() => {
-    console.log("reloadUserPanel triggered", reloadUserPanel);
-    if (reloadUserPanel) {
-      setUserListIsLoaded(false);
-      console.log("userListIsLoaded:", userListIsLoaded, "from page");
-    } else if (!reloadUserPanel) {
-      setUserListIsLoaded(true);
-      console.log("userListIsLoaded:", userListIsLoaded, "from page");
-    }
-  }, [reloadUserPanel]);
-
-  useEffect(() => {
-    if (userListIsLoaded) {
-      console.log("userList loaded");
-    } else if (!userListIsLoaded) {
-      console.log("userList not loaded");
-    }
-  }, [userListIsLoaded]);
-
   return (
     <>
       <Navbar />

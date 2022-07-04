@@ -30,15 +30,12 @@ const ModalFormInnerScaffold = ({
   const superSecretPassword = "hunter02";
 
   const { formIsValid } = useContext(UserFormContext);
-  const { reloadUserPanel, setReloadUserPanel } = useContext(UserPanelContext);
 
-  const { currentAccount, setUserList } = useContext(AdminContext);
+  const { setUserListIsLoaded, setRetrieveUsers } = useContext(AdminContext);
 
   const [adminPass, setAdminPass] = useState("");
   const [adminPassIsValid, setAdminPassIsValid] = useState(false);
   const [buttonActive, setButtonActive] = useState(false);
-  const [reLoadedData, setReloadedData] = useState({});
-
   // const refreshData = () => {
   //   setReloadUserPanel(true);
   //   setReloadedData(refreshUsers());
@@ -58,21 +55,6 @@ const ModalFormInnerScaffold = ({
   //   return newAccount;
   // };
 
-  const filterUsers = (users, id) => {
-    return users.filter((user) => user.accountUsersId === id);
-  };
-
-  const refreshUsers = async () => {
-    const newUserData = await API.graphql(graphqlOperation(listUsers));
-    const filtered = filterUsers(
-      newUserData.data.listUsers.items,
-      currentAccount.id
-    );
-    console.log("Refreshing users:");
-    console.log(filtered);
-    return filtered;
-  };
-
   const handleValidation = () => {
     if (formIsValid) {
       setShowPassword(true);
@@ -81,9 +63,10 @@ const ModalFormInnerScaffold = ({
 
   const handleFormSubmit = (e) => {
     if (adminPassIsValid) {
+      setUserListIsLoaded(false);
+      setRetrieveUsers(false);
       gqlSubmit(e);
       onClose();
-      setReloadUserPanel(true);
     }
   };
 
@@ -104,24 +87,6 @@ const ModalFormInnerScaffold = ({
       setAdminPassIsValid(true);
     }
   }, [adminPass]);
-
-  useEffect(() => {
-    if (reloadUserPanel) {
-      console.log("refreshing users...");
-      setReloadedData(refreshUsers());
-    }
-  }, [reloadUserPanel]);
-
-  useEffect(() => {
-    console.log("From reLoadedData UE:");
-    if (reLoadedData && reloadUserPanel) {
-      console.log("setting UserList to :");
-      console.log(reLoadedData);
-      setUserList(reLoadedData);
-      console.log("setting ReloadUserPanel to false");
-      setReloadUserPanel(false);
-    }
-  }, [reLoadedData]);
 
   return (
     <>

@@ -29,6 +29,7 @@ const UserPanel = () => {
   const [buttonEnabled, setButtonEnabled] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [createUserActive, setCreateUserActive] = useState(false);
+  const [tableMode, setTableMode] = useState("disabled");
 
   const showSelect = (e) => {
     switch (e.target.value) {
@@ -37,12 +38,14 @@ const UserPanel = () => {
           <DeleteUser onClose={onClose} buttonKeyword="Delete" />
         );
         setButtonEnabled(true);
+        setTableMode("delete");
         break;
       case "update":
         setModalContent(
           <UpdateUser onClose={onClose} buttonKeyword="Update" />
         );
         setButtonEnabled(true);
+        setTableMode("update");
         break;
       case "generate":
         setModalContent(
@@ -53,6 +56,7 @@ const UserPanel = () => {
             userList={userList}
           />
         );
+        setTableMode("disabled");
         setButtonEnabled(true);
         break;
       case "create":
@@ -64,6 +68,7 @@ const UserPanel = () => {
             buttonKeyword="Create"
           />
         );
+        setTableMode("disabled");
         setButtonEnabled(true);
         break;
       default:
@@ -97,7 +102,11 @@ const UserPanel = () => {
           </Button>
         </Flex>
       </Flex>
-      <UserTable data={userList} />
+      <UserTable
+        data={userList}
+        tableMode={tableMode}
+        setTableMode={setTableMode}
+      />
       <Modal isOpen={isOpen} onClose={onClose}>
         {modalContent}
         {/* <CreateUser account={currentAccount} userList={userList} /> */}

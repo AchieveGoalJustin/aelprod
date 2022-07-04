@@ -81,6 +81,7 @@ const CreateUser = ({ account, userList, buttonKeyword, onClose }) => {
         },
       })
     );
+    setFormIsValid(false);
   };
 
   useEffect(() => {
