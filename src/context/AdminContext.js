@@ -12,10 +12,13 @@ export const AdminProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState({});
   const [currentSchool, setCurrentSchool] = useState({});
   const [retrieveUsers, setRetrieveUsers] = useState(false);
+  const [schoolName, setSchoolName] = useState("");
 
   return (
     <AdminContext.Provider
       value={{
+        schoolName,
+        setSchoolName,
         schoolId,
         accountId,
         userId,

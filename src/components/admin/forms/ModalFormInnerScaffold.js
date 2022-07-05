@@ -13,11 +13,7 @@ import {
 } from "@chakra-ui/react";
 
 import UserFormContext from "../../../context/UserFormContext";
-import UserPanelContext from "../../../context/UserPanelContext";
 import AdminContext from "../../../context/AdminContext";
-
-import { getSchool, getAccount, listUsers } from "../../../graphql/queries";
-import { API, graphqlOperation } from "aws-amplify";
 
 const ModalFormInnerScaffold = ({
   gqlSubmit,
@@ -36,25 +32,7 @@ const ModalFormInnerScaffold = ({
   const [adminPass, setAdminPass] = useState("");
   const [adminPassIsValid, setAdminPassIsValid] = useState(false);
   const [buttonActive, setButtonActive] = useState(false);
-  // const refreshData = () => {
-  //   setReloadUserPanel(true);
-  //   setReloadedData(refreshUsers());
-  // };
-
-  // const refreshSchool = async () => {
-  //   let newSchool = await API.graphql(
-  //     graphqlOperation(getSchool, { input: { id: currentSchool.id } })
-  //   );
-  //   return newSchool;
-  // };
-
-  // const refreshAccount = async () => {
-  //   let newAccount = await API.graphql(
-  //     graphqlOperation(getAccount, { input: { id: currentAccount.id } })
-  //   );
-  //   return newAccount;
-  // };
-
+  
   const handleValidation = () => {
     if (formIsValid) {
       setShowPassword(true);

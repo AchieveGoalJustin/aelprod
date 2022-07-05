@@ -29,6 +29,7 @@ import AdminContext from "../../context/AdminContext";
 
 const SchoolPanel = () => {
   const {
+    setSchoolName,
     setSchoolId,
     setAccountIsLoaded,
     setUserListIsLoaded,
@@ -71,6 +72,7 @@ const SchoolPanel = () => {
     console.log("userListIsLoaded:", userListIsLoaded, "from schoolpanel");
 
     currentSchool && setSchoolId(currentSchool.id);
+    currentSchool && setSchoolName(currentSchool.name);
   }, [isLoaded, currentSchool]);
 
   useEffect(() => {

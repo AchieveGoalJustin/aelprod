@@ -4,21 +4,47 @@ import * as parsers from "../../utils/database/numberParsers";
 
 import { FormLabel, Input, Text } from "@chakra-ui/react";
 
+import { createUser, updateAccount } from "../../graphql/mutations";
+import { API, graphqlOperation } from "aws-amplify";
+
 import ModalFormInnerScaffold from "./forms/ModalFormInnerScaffold";
 import UserFormContext from "../../context/UserFormContext";
+import AdminContext from "../../context/AdminContext";
 
 const GenerateUsers = ({ buttonKeyword, userList, account, onClose }) => {
   const { setFormIsValid } = useContext(UserFormContext);
+  const { schoolName } = useContext(AdminContext);
 
-  const userNumbers = userList.map((user) => {
+  const userNos = userList.map((user) => {
     return parsers.stringToInt(user.number);
   });
 
-  const [username, setUsername] = useState("");
+  userNos.sort((a, b) => a - b);
   const [password, setPassword] = useState("");
+  const [userNumbers, setUserNumbers] = useState(userNos);
+  const [username, setUsername] = useState("");
   const [number, setNumber] = useState("");
   const [numberIsValid, setNumberIsValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  async function setUserData(number) {
+    let newUser = await API.graphql(
+      graphqlOperation(createUser, {
+        input: {
+          number: number,
+          password: password,
+          username: username,
+          accountUsersId: account.id,
+        },
+      })
+    );
+
+    let updatedAccount = await API.graphql(
+      graphqlOperation(updateAccount, {
+        input: { id: account.id, usercount: account.usercount + 1 },
+      })
+    );
+  }
 
   function checkFormIsValid() {
     if (numberIsValid) {
@@ -28,9 +54,9 @@ const GenerateUsers = ({ buttonKeyword, userList, account, onClose }) => {
 
   function checkNumberIsValid() {
     if (
-      userNumbers.includes(parsers.stringToInt(number)) ||
+      // userNumbers.includes(parsers.stringToInt(number)) ||
       number.length < 1 ||
-      !parsers.stringToInt(number)
+      !Number.isSafeInteger(parsers.stringToInt(number))
     ) {
       setNumberIsValid(false);
       setFormIsValid(false);
@@ -39,30 +65,79 @@ const GenerateUsers = ({ buttonKeyword, userList, account, onClose }) => {
     }
   }
 
+  function handleNumberInput(e) {
+    if (e.target.value.length < 4) {
+      if (e.target.value !== NaN) {
+        setNumber(parsers.stringToInt(e.target.value));
+      }
+    }
+  }
+
+  function checkUserNumber(index, numberList) {
+    let returnNumber = 0;
+    let returnIndex = 0;
+    let returnArray = numberList;
+    let startNumber = numberList[index];
+    while (!returnNumber) {
+      if (numberList.includes(startNumber)) {
+        returnIndex = numberList.indexOf(startNumber);
+        startNumber++;
+      } else {
+        returnNumber = startNumber;
+        returnArray.push(returnNumber);
+      }
+    }
+    return { number: returnNumber, index: returnIndex, array: returnArray };
+  }
+
+  function cycleUserNumbers(checkObj, setNo) {
+    if (setNo) {
+      console.log(schoolName + parsers.intToString(setNo));
+      console.log(getRandomPassword(4));
+      // setUsername(schoolName + parsers.intToString(setNo));
+      // setPassword(getRandomPassword(4));
+      // setUserData(setNo);
+      console.log("api call");
+    }
+    if (checkObj.number < number) {
+      console.log(checkObj);
+      let nextCheckObj = checkUserNumber(checkObj.index, checkObj.array);
+      cycleUserNumbers(nextCheckObj, nextCheckObj.number);
+    }
+  }
+
   const generateNewUsers = async (e) => {
     e.preventDefault();
 
-    // let updatedAccount = await API.graphql(
-    //   graphqlOperation(updateAccount, {
-    //     input: { id: account.id, usercount: account.usercount + 1 },
-    //   })
-    // );
+    let initialSet = checkUserNumber(0, userNumbers);
+    cycleUserNumbers(initialSet, initialSet.number);
 
-    // let newUser = await API.graphql(
-    //   graphqlOperation(createUser, {
-    //     input: {
-    //       number: number,
-    //       password: password,
-    //       username: username,
-    //       accountUsersId: account.id,
-    //     },
-    //   })
-    // );
+    let updatedAccount = await API.graphql(
+      graphqlOperation(updateAccount, {
+        input: { id: account.id, usercount: account.usercount + 1 },
+      })
+    );
+
+    let newUser = await API.graphql(
+      graphqlOperation(createUser, {
+        input: {
+          number: number,
+          password: password,
+          username: username,
+          accountUsersId: account.id,
+        },
+      })
+    );
   };
 
   useEffect(() => {
+    console.log(userNumbers);
+    console.log(checkUserNumber(0, userNumbers));
+  }, []);
+
+  useEffect(() => {
     checkNumberIsValid();
-  }, [number, username, password]);
+  }, [number]);
 
   useEffect(() => {
     checkFormIsValid();
@@ -70,6 +145,8 @@ const GenerateUsers = ({ buttonKeyword, userList, account, onClose }) => {
 
   useEffect(() => {
     console.log(getRandomPassword(4));
+    console.log(username);
+    console.log(password);
   });
 
   return (
@@ -78,20 +155,23 @@ const GenerateUsers = ({ buttonKeyword, userList, account, onClose }) => {
       userList={userList}
       showPassword={showPassword}
       setShowPassword={setShowPassword}
-      gqlSubmit={createNewUser}
+      gqlSubmit={generateNewUsers}
       buttonKeyword={buttonKeyword}
       onClose={onClose}
     >
       <FormLabel>User Amount</FormLabel>
       <Input
-        isInvalid={!usernameIsValid}
-        type="text"
-        value={username}
-        onChange={(e) => setNumber(Math.floor(e.target.value))}
+        maxLength={4}
+        isInvalid={!numberIsValid}
+        type="number"
+        value={number}
+        onChange={(e) => handleNumberInput(e)}
         isDisabled={showPassword}
       />
       {!numberIsValid ? (
-        <Text color="red">Input must be a positive non-zero number.</Text>
+        <Text color="red">
+          Input must be a positive non-zero number between 1 and 1000.
+        </Text>
       ) : (
         <></>
       )}
