@@ -7,7 +7,6 @@ import {
   Select,
   Spacer,
   Button,
-  Text,
   Modal,
 } from "@chakra-ui/react";
 
@@ -24,18 +23,22 @@ import AdminContext from "../../context/AdminContext";
 const UserPanel = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { userList, accountId, currentAccount } = useContext(AdminContext);
+  const { userList, accountId, currentAccount, tableMode, setTableMode } =
+    useContext(AdminContext);
 
   const [buttonEnabled, setButtonEnabled] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [createUserActive, setCreateUserActive] = useState(false);
-  const [tableMode, setTableMode] = useState("disabled");
 
   const showSelect = (e) => {
     switch (e.target.value) {
       case "delete":
         setModalContent(
-          <DeleteUser onClose={onClose} buttonKeyword="Delete" />
+          <DeleteUser
+            onClose={onClose}
+            buttonKeyword="Delete Selected"
+            account={currentAccount}
+          />
         );
         setButtonEnabled(true);
         setTableMode("delete");
@@ -56,7 +59,7 @@ const UserPanel = () => {
             userList={userList}
           />
         );
-        setTableMode("disabled");
+        setTableMode("generate");
         setButtonEnabled(true);
         break;
       case "create":
@@ -68,7 +71,7 @@ const UserPanel = () => {
             buttonKeyword="Create"
           />
         );
-        setTableMode("disabled");
+        setTableMode("create");
         setButtonEnabled(true);
         break;
       default:
@@ -104,8 +107,6 @@ const UserPanel = () => {
       </Flex>
       <UserTable
         data={userList}
-        tableMode={tableMode}
-        setTableMode={setTableMode}
       />
       <Modal isOpen={isOpen} onClose={onClose}>
         {modalContent}

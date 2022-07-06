@@ -3,6 +3,8 @@ import { createContext, useState } from "react";
 const AdminContext = createContext();
 
 export const AdminProvider = ({ children }) => {
+  const [tableMode, setTableMode] = useState("disabled");
+  const [deleteList, setDeleteList] = useState([]);
   const [schoolId, setSchoolId] = useState();
   const [accountId, setAccountId] = useState();
   const [userId, setUserId] = useState();
@@ -13,10 +15,17 @@ export const AdminProvider = ({ children }) => {
   const [currentSchool, setCurrentSchool] = useState({});
   const [retrieveUsers, setRetrieveUsers] = useState(false);
   const [schoolName, setSchoolName] = useState("");
+  const [generateList, setGenerateList] = useState([]);
 
   return (
     <AdminContext.Provider
       value={{
+        generateList,
+        setGenerateList,
+        tableMode,
+        setTableMode,
+        deleteList,
+        setDeleteList,
         schoolName,
         setSchoolName,
         schoolId,

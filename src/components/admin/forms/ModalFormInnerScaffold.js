@@ -27,12 +27,21 @@ const ModalFormInnerScaffold = ({
 
   const { formIsValid } = useContext(UserFormContext);
 
-  const { setUserListIsLoaded, setRetrieveUsers } = useContext(AdminContext);
+  const {
+    setUserListIsLoaded,
+    setRetrieveUsers,
+    deleteList,
+    setDeleteList,
+    tableMode,
+    generateList,
+    setGenerateList,
+    schoolName,
+  } = useContext(AdminContext);
 
   const [adminPass, setAdminPass] = useState("");
   const [adminPassIsValid, setAdminPassIsValid] = useState(false);
   const [buttonActive, setButtonActive] = useState(false);
-  
+
   const handleValidation = () => {
     if (formIsValid) {
       setShowPassword(true);
@@ -40,11 +49,27 @@ const ModalFormInnerScaffold = ({
   };
 
   const handleFormSubmit = (e) => {
+    e.preventDefault;
     if (adminPassIsValid) {
-      setUserListIsLoaded(false);
-      setRetrieveUsers(false);
-      gqlSubmit(e);
-      onClose();
+      if (deleteList.length > 0 && tableMode === "delete") {
+        console.log(deleteList);
+        setUserListIsLoaded(false);
+        setRetrieveUsers(false);
+        gqlSubmit(deleteList);
+        setDeleteList([]);
+        onClose();
+      } else if (generateList.length > 0 && tableMode === "generate") {
+        setUserListIsLoaded(false);
+        setRetrieveUsers(false);
+        gqlSubmit(generateList, schoolName);
+        setGenerateList([]);
+        onClose();
+      } else {
+        setUserListIsLoaded(false);
+        setRetrieveUsers(false);
+        gqlSubmit(e);
+        onClose();
+      }
     }
   };
 

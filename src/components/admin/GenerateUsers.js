@@ -13,21 +13,19 @@ import AdminContext from "../../context/AdminContext";
 
 const GenerateUsers = ({ buttonKeyword, userList, account, onClose }) => {
   const { setFormIsValid } = useContext(UserFormContext);
-  const { schoolName } = useContext(AdminContext);
+  const { setGenerateList } = useContext(AdminContext);
 
   const userNos = userList.map((user) => {
     return parsers.stringToInt(user.number);
   });
 
   userNos.sort((a, b) => a - b);
-  const [password, setPassword] = useState("");
   const [userNumbers, setUserNumbers] = useState(userNos);
-  const [username, setUsername] = useState("");
   const [number, setNumber] = useState("");
   const [numberIsValid, setNumberIsValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  async function setUserData(number) {
+  async function setUserData(number, username, password) {
     let newUser = await API.graphql(
       graphqlOperation(createUser, {
         input: {
@@ -54,7 +52,6 @@ const GenerateUsers = ({ buttonKeyword, userList, account, onClose }) => {
 
   function checkNumberIsValid() {
     if (
-      // userNumbers.includes(parsers.stringToInt(number)) ||
       number.length < 1 ||
       !Number.isSafeInteger(parsers.stringToInt(number))
     ) {
@@ -73,81 +70,42 @@ const GenerateUsers = ({ buttonKeyword, userList, account, onClose }) => {
     }
   }
 
-  function checkUserNumber(index, numberList) {
-    let returnNumber = 0;
-    let returnIndex = 0;
-    let returnArray = numberList;
-    let startNumber = numberList[index];
-    while (!returnNumber) {
-      if (numberList.includes(startNumber)) {
-        returnIndex = numberList.indexOf(startNumber);
-        startNumber++;
+  function checkUserNumber() {
+    console.log("checking user numbers");
+    let returnArray = [];
+    let recentVal = 0;
+    while (returnArray.length < number) {
+      if (userNumbers.includes(recentVal) || returnArray.includes(recentVal)) {
+        recentVal++;
       } else {
-        returnNumber = startNumber;
-        returnArray.push(returnNumber);
+        returnArray.push(recentVal);
       }
     }
-    return { number: returnNumber, index: returnIndex, array: returnArray };
+    setGenerateList(returnArray);
   }
 
-  function cycleUserNumbers(checkObj, setNo) {
-    if (setNo) {
-      console.log(schoolName + parsers.intToString(setNo));
-      console.log(getRandomPassword(4));
-      // setUsername(schoolName + parsers.intToString(setNo));
-      // setPassword(getRandomPassword(4));
-      // setUserData(setNo);
-      console.log("api call");
-    }
-    if (checkObj.number < number) {
-      console.log(checkObj);
-      let nextCheckObj = checkUserNumber(checkObj.index, checkObj.array);
-      cycleUserNumbers(nextCheckObj, nextCheckObj.number);
-    }
-  }
+  const generateNewUsers = (list, schoolName) => {
+    list.forEach((number) => {
+      const parsed = parsers.intToString(number, 4);
+      const username = schoolName + parsed;
+      const password = getRandomPassword(4);
 
-  const generateNewUsers = async (e) => {
-    e.preventDefault();
-
-    let initialSet = checkUserNumber(0, userNumbers);
-    cycleUserNumbers(initialSet, initialSet.number);
-
-    let updatedAccount = await API.graphql(
-      graphqlOperation(updateAccount, {
-        input: { id: account.id, usercount: account.usercount + 1 },
-      })
-    );
-
-    let newUser = await API.graphql(
-      graphqlOperation(createUser, {
-        input: {
-          number: number,
-          password: password,
-          username: username,
-          accountUsersId: account.id,
-        },
-      })
-    );
+      setUserData(parsed, username, password);
+    });
   };
 
   useEffect(() => {
     console.log(userNumbers);
-    console.log(checkUserNumber(0, userNumbers));
   }, []);
 
   useEffect(() => {
+    checkUserNumber();
     checkNumberIsValid();
   }, [number]);
 
   useEffect(() => {
     checkFormIsValid();
   }, [numberIsValid]);
-
-  useEffect(() => {
-    console.log(getRandomPassword(4));
-    console.log(username);
-    console.log(password);
-  });
 
   return (
     <ModalFormInnerScaffold
