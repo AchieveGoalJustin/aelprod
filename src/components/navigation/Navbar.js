@@ -1,6 +1,5 @@
 import React from "react";
 import SignOutButton from "./SignOutButton";
-import UserMenuDropdown from "./UserMenuDropdown";
 
 import { Image, Box, Flex } from "@chakra-ui/react";
 
@@ -65,7 +64,6 @@ const Navbar = ({ username }) => {
         </NextLink>
       </Flex>
       <Flex justifyContent="right" flexDir={"row"} width={"45%"}>
-        <UserMenuDropdown menuprops={user} username={username} />
         <SignOutButton />
       </Flex>
     </Flex>

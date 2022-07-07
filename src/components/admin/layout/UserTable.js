@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, createRef } from "react";
 
-import { CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 
 import {
   Table,
@@ -23,42 +23,62 @@ import AdminContext from "../../../context/AdminContext";
 import * as parsers from "../../../utils/database/numberParsers";
 
 const UserTable = ({ data }) => {
-  const [csvIsdownload, setCsvIsDownload] = useState(false);
-  const [csvPassword, setCsvPassword] = useState([]);
-  const [csvUsername, setCsvUsername] = useState([]);
-  const [csvNumber, setCsvNumber] = useState([]);
-  const [csvHeader, setCsvHeader] = useState([
-    "number",
-    "username",
-    "password",
-  ]);
+  const [csvData, setCsvData] = useState(data);
   const [amountSelected, setAmountSelected] = useState(0);
   const [checklistState, setChecklistState] = useState(true);
-  const [updateBox, setUpdateBox] = useState(null);
   const [sortedData, setSortedData] = useState([]);
 
-  const { deleteList, setDeleteList, tableMode } = useContext(AdminContext);
+  const {
+    deleteList,
+    setDeleteList,
+    tableMode,
+    schoolName,
+    currentAccount,
+    updateUser,
+    setUpdateUser,
+  } = useContext(AdminContext);
 
-  const hanldeCheckList = (e, id) => {
+  const csvLink = createRef();
+
+  const handleCheckList = (e, id) => {
     if (e.target.checked) {
       if (tableMode === "delete") {
         setDeleteList([...deleteList, id]);
         setAmountSelected((amountSelected) => amountSelected + 1);
       } else if (tableMode === "update") {
-        setUpdateBox(id);
+        setUpdateUser(id);
         setAmountSelected((amountSelected) => amountSelected + 1);
       }
     } else {
       setAmountSelected((amountSelected) => amountSelected - 1);
+      // setDeleteList((deleteList) =>
+      //   deleteList.splice(deleteList.indexOf(id), 1)
+      // );
       deleteList.splice(deleteList.indexOf(id), 1);
+      setUpdateUser(null);
     }
   };
 
   const handleIsChecked = (id) => {
     if (tableMode === "update") {
-      id === updateBox ? true : false;
+      if (id === updateUser) {
+        return true;
+      } else {
+        return false;
+      }
     } else if (tableMode === "delete") {
-      deleteList.includes(id) ? true : false;
+      // deleteList.includes(id) ? true : false;
+      if (deleteList.includes(id)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (
+      tableMode === "reset" ||
+      tableMode === "generate" ||
+      tableMode === "reset"
+    ) {
+      return false;
     }
   };
 
@@ -71,17 +91,19 @@ const UserTable = ({ data }) => {
       case "delete":
         return false;
       case "update":
-        if (amountSelected < 1) {
+        if (amountSelected < 1 || id === updateUser) {
           return false;
-        } else if (amountSelected >= 1 && id !== updateBox) {
+        } else if (amountSelected >= 1 && id !== updateUser) {
           return true;
         }
+      case "reset":
+        return true;
     }
   };
 
   const handleTableMode = (mode, amountSelected) => {
     setAmountSelected(0);
-    setUpdateBox(null);
+    setUpdateUser(null);
     setDeleteList([]);
     switch (mode) {
       case "generate":
@@ -96,6 +118,8 @@ const UserTable = ({ data }) => {
         } else if (amountSelected >= 1) {
           return true;
         }
+      case "reset":
+        return false;
     }
   };
 
@@ -107,27 +131,32 @@ const UserTable = ({ data }) => {
     }
   };
 
-  const handleCsv = () => {
-    const numberArray = sortedData.map((user) => {
-      return user.number;
+  const initializeCsvData = () => {
+    let newCsvData = sortedData.map((datum) => Object.assign({}, datum));
+    newCsvData.forEach((datum) => {
+      delete datum.accountUsersId;
+      return (datum.number = `=""${datum.number}""`);
     });
-    const usernameArray = sortedData.map((user) => {
-      return user.username;
-    });
-    const passwordArray = sortedData.map((user) => {
-      return user.password;
-    });
+    setCsvData(newCsvData);
+  };
 
-    setCsvNumber(numberArray);
-    setCsvUsername(usernameArray);
-    setCsvPassword(passwordArray);
-    setCsvIsDownload(true);
-    console.log("csv download");
+  const handleCsv = () => {
+    csvLink.current.link.click();
   };
 
   useEffect(() => {
     setChecklistState(handleTableMode(tableMode, amountSelected));
+  }, []);
+
+  useEffect(() => {
+    handleTableMode(tableMode, amountSelected);
   }, [tableMode]);
+
+  useEffect(() => {
+    if (sortedData) {
+      initializeCsvData();
+    }
+  }, [sortedData]);
 
   useEffect(() => {
     setSortedData(
@@ -137,21 +166,16 @@ const UserTable = ({ data }) => {
     );
   }, [data]);
 
-  useEffect(() => {
-    if (csvIsdownload) {
-      setCsvIsDownload(false);
-    }
-  }, [csvIsdownload]);
-
-  useEffect(() => {
-    console.log(tableMode);
-    console.log(deleteList);
-  });
-
   return (
     <TableContainer>
       <Button colorScheme="green" size="sm" my={2} onClick={handleCsv}>
         Download CSV
+        <CSVLink
+          data={csvData ? csvData : data}
+          target=""
+          filename={schoolName + "-" + currentAccount.number}
+          ref={csvLink}
+        />
       </Button>
       <Table variant="striped" colorScheme="blue">
         <Thead>
@@ -175,11 +199,11 @@ const UserTable = ({ data }) => {
                     ms={4}
                     bg="white"
                     colorScheme={"green"}
+                    isChecked={handleIsChecked(user.id)}
                     isDisabled={handleIsDisabled(user.id)}
                     onChange={(e) => {
-                      hanldeCheckList(e, user.id);
+                      handleCheckList(e, user.id);
                     }}
-                    isChecked={handleIsChecked(user.id)}
                   />
                 </Td>
                 <Td>{handleDate(user.createdAt)}</Td>
@@ -188,7 +212,6 @@ const UserTable = ({ data }) => {
           })}
         </Tbody>
       </Table>
-      {csvIsdownload ? <CSVDownload data={sortedData} target="" /> : ""}
     </TableContainer>
   );
 };

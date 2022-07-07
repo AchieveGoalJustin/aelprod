@@ -3,7 +3,8 @@ import { createContext, useState } from "react";
 const AdminContext = createContext();
 
 export const AdminProvider = ({ children }) => {
-  const [tableMode, setTableMode] = useState("disabled");
+  const [updateUser, setUpdateUser] = useState("");
+  const [tableMode, setTableMode] = useState("reset");
   const [deleteList, setDeleteList] = useState([]);
   const [schoolId, setSchoolId] = useState();
   const [accountId, setAccountId] = useState();
@@ -20,6 +21,8 @@ export const AdminProvider = ({ children }) => {
   return (
     <AdminContext.Provider
       value={{
+        updateUser,
+        setUpdateUser,
         generateList,
         setGenerateList,
         tableMode,

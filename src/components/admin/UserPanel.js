@@ -23,12 +23,17 @@ import AdminContext from "../../context/AdminContext";
 const UserPanel = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { userList, accountId, currentAccount, tableMode, setTableMode } =
-    useContext(AdminContext);
+  const {
+    userList,
+    currentAccount,
+    setTableMode,
+    deleteList,
+    updateUser,
+    tableMode,
+  } = useContext(AdminContext);
 
   const [buttonEnabled, setButtonEnabled] = useState(false);
   const [modalContent, setModalContent] = useState("");
-  const [createUserActive, setCreateUserActive] = useState(false);
 
   const showSelect = (e) => {
     switch (e.target.value) {
@@ -75,9 +80,44 @@ const UserPanel = () => {
         setButtonEnabled(true);
         break;
       default:
+        setTableMode("reset");
         setButtonEnabled(false);
     }
   };
+
+  useEffect(() => {
+    setTableMode("reset");
+  }, []);
+
+  useEffect(() => {
+    console.log(deleteList);
+    console.log(tableMode);
+    console.log(deleteList.length);
+    switch (tableMode) {
+      case "delete":
+        console.log("evaluating delete");
+        if (deleteList.length == 0) {
+          console.log(false);
+          setButtonEnabled(false);
+          break;
+        } else if (deleteList.length >= 1) {
+          setButtonEnabled(true);
+          console.log(true);
+          break;
+        }
+      case "update":
+        console.log("evaluating update");
+        if (!updateUser) {
+          console.log(false);
+          setButtonEnabled(false);
+          break;
+        } else if (updateUser) {
+          console.log(true);
+          setButtonEnabled(true);
+          break;
+        }
+    }
+  }, [deleteList, updateUser]);
 
   return (
     <Box p="5" w="100%" boxShadow={"md"} bgColor="white">
@@ -105,9 +145,7 @@ const UserPanel = () => {
           </Button>
         </Flex>
       </Flex>
-      <UserTable
-        data={userList}
-      />
+      <UserTable data={userList} />
       <Modal isOpen={isOpen} onClose={onClose}>
         {modalContent}
         {/* <CreateUser account={currentAccount} userList={userList} /> */}
