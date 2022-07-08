@@ -35,8 +35,6 @@ const DeleteUser = ({ buttonKeyword, account, onClose }) => {
   }
 
   function cycleDelete(deleteArr) {
-    console.log("in cycleDelete");
-    console.log(deleteArr);
     deleteArr.forEach((id) => {
       deleteUserFromList(id);
     });
@@ -51,7 +49,6 @@ const DeleteUser = ({ buttonKeyword, account, onClose }) => {
   }, [deleteList]);
 
   useEffect(() => {
-    console.log(deleteList);
   });
   return (
     <ModalFormInnerScaffold

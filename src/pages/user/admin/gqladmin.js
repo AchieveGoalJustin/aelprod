@@ -118,9 +118,7 @@ const awsapi = (props) => {
       const password = generator.generate({
         length: 7,
         numbers: true,
-      });
-
-      console.log("Number: " + number);
+      })
 
       const user = await API.graphql(
         graphqlOperation(createUser, {

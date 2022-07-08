@@ -71,7 +71,6 @@ const GenerateUsers = ({ buttonKeyword, userList, account, onClose }) => {
   }
 
   function checkUserNumber() {
-    console.log("checking user numbers");
     let returnArray = [];
     let recentVal = 0;
     while (returnArray.length < number) {
@@ -93,10 +92,6 @@ const GenerateUsers = ({ buttonKeyword, userList, account, onClose }) => {
       setUserData(parsed, username, password);
     });
   };
-
-  useEffect(() => {
-    console.log(userNumbers);
-  }, []);
 
   useEffect(() => {
     checkUserNumber();

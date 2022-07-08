@@ -28,8 +28,10 @@ const UserPanel = () => {
     currentAccount,
     setTableMode,
     deleteList,
-    updateUser,
+    userToUpdate,
     tableMode,
+    amountSelected,
+    setAmountSelected,
   } = useContext(AdminContext);
 
   const [buttonEnabled, setButtonEnabled] = useState(false);
@@ -47,6 +49,7 @@ const UserPanel = () => {
         );
         setButtonEnabled(true);
         setTableMode("delete");
+        setAmountSelected(0);
         break;
       case "update":
         setModalContent(
@@ -54,6 +57,7 @@ const UserPanel = () => {
         );
         setButtonEnabled(true);
         setTableMode("update");
+        setAmountSelected(0);
         break;
       case "generate":
         setModalContent(
@@ -90,34 +94,25 @@ const UserPanel = () => {
   }, []);
 
   useEffect(() => {
-    console.log(deleteList);
-    console.log(tableMode);
-    console.log(deleteList.length);
     switch (tableMode) {
       case "delete":
-        console.log("evaluating delete");
-        if (deleteList.length == 0) {
-          console.log(false);
+        if (amountSelected === 0) {
           setButtonEnabled(false);
           break;
-        } else if (deleteList.length >= 1) {
+        } else if (amountSelected >= 1) {
           setButtonEnabled(true);
-          console.log(true);
           break;
         }
       case "update":
-        console.log("evaluating update");
-        if (!updateUser) {
-          console.log(false);
+        if (!userToUpdate) {
           setButtonEnabled(false);
           break;
-        } else if (updateUser) {
-          console.log(true);
+        } else if (userToUpdate) {
           setButtonEnabled(true);
           break;
         }
     }
-  }, [deleteList, updateUser]);
+  }, [deleteList, userToUpdate, amountSelected]);
 
   return (
     <Box p="5" w="100%" boxShadow={"md"} bgColor="white">

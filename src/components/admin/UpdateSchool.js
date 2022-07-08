@@ -41,8 +41,6 @@ const UpdateSchool = ({ school }) => {
     delete data.id;
     delete data.updatedAt;
     delete data.createdAt;
-    console.log(data);
-    console.log(school);
     entriesArray = Object.entries(data);
   }
 
@@ -53,7 +51,6 @@ const UpdateSchool = ({ school }) => {
   const handleUndo = () => {
     setName(school.name);
     setNumber(school.number);
-    console.log(name, number);
   };
 
   const handleNumberChange = (e) => {
@@ -120,7 +117,7 @@ const UpdateSchool = ({ school }) => {
             <Button colorScheme="red" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="green" mr={3} onClick={console.log("update")}>
+            <Button colorScheme="green" mr={3}>
               Confirm
             </Button>
           </ModalFooter>

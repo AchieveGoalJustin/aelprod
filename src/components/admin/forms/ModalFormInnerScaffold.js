@@ -23,7 +23,7 @@ const ModalFormInnerScaffold = ({
   setShowPassword,
   onClose,
 }) => {
-  const superSecretPassword = "hunter02";
+  const superSecretPassword = "cpd20210601";
 
   const { formIsValid } = useContext(UserFormContext);
 
@@ -52,7 +52,6 @@ const ModalFormInnerScaffold = ({
     e.preventDefault;
     if (adminPassIsValid) {
       if (deleteList.length > 0 && tableMode === "delete") {
-        console.log(deleteList);
         setUserListIsLoaded(false);
         setRetrieveUsers(false);
         gqlSubmit(deleteList);
@@ -88,6 +87,8 @@ const ModalFormInnerScaffold = ({
   useEffect(() => {
     if (adminPass === superSecretPassword) {
       setAdminPassIsValid(true);
+    } else {
+      setAdminPassIsValid(false)
     }
   }, [adminPass]);
 

@@ -69,7 +69,6 @@ const SchoolPanel = () => {
   useEffect(() => {
     setAccountIsLoaded(false);
     setUserListIsLoaded(false);
-    console.log("userListIsLoaded:", userListIsLoaded, "from schoolpanel");
 
     currentSchool && setSchoolId(currentSchool.id);
     currentSchool && setSchoolName(currentSchool.name);
@@ -103,12 +102,7 @@ const SchoolPanel = () => {
           mb={3}
           placeholder="Select School"
           onChange={(e) => {
-            isLoaded && console.log("target.value");
-            console.log(e.target.value);
-            console.log("filtered");
-            console.log(
-              schoolList.filter((school) => e.target.value === school.id)[0]
-            );
+            isLoaded && 
             setCurrentSchool(
               schoolList.filter((school) => e.target.value === school.id)[0]
             );

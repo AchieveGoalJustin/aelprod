@@ -75,7 +75,6 @@ const AcctPanel = () => {
   };
 
   useEffect(() => {
-    console.log(accountId);
     setUserListIsLoaded(false);
   }, [accountId]);
 

@@ -24,7 +24,6 @@ import * as parsers from "../../../utils/database/numberParsers";
 
 const UserTable = ({ data }) => {
   const [csvData, setCsvData] = useState(data);
-  const [amountSelected, setAmountSelected] = useState(0);
   const [checklistState, setChecklistState] = useState(true);
   const [sortedData, setSortedData] = useState([]);
 
@@ -34,8 +33,10 @@ const UserTable = ({ data }) => {
     tableMode,
     schoolName,
     currentAccount,
-    updateUser,
-    setUpdateUser,
+    userToUpdate,
+    setUserToUpdate,
+    amountSelected,
+    setAmountSelected,
   } = useContext(AdminContext);
 
   const csvLink = createRef();
@@ -46,7 +47,7 @@ const UserTable = ({ data }) => {
         setDeleteList([...deleteList, id]);
         setAmountSelected((amountSelected) => amountSelected + 1);
       } else if (tableMode === "update") {
-        setUpdateUser(id);
+        setUserToUpdate(id);
         setAmountSelected((amountSelected) => amountSelected + 1);
       }
     } else {
@@ -55,13 +56,13 @@ const UserTable = ({ data }) => {
       //   deleteList.splice(deleteList.indexOf(id), 1)
       // );
       deleteList.splice(deleteList.indexOf(id), 1);
-      setUpdateUser(null);
+      setUserToUpdate(null);
     }
   };
 
   const handleIsChecked = (id) => {
     if (tableMode === "update") {
-      if (id === updateUser) {
+      if (id === userToUpdate) {
         return true;
       } else {
         return false;
@@ -91,9 +92,9 @@ const UserTable = ({ data }) => {
       case "delete":
         return false;
       case "update":
-        if (amountSelected < 1 || id === updateUser) {
+        if (amountSelected < 1 || id === userToUpdate) {
           return false;
-        } else if (amountSelected >= 1 && id !== updateUser) {
+        } else if (amountSelected >= 1 && id !== userToUpdate) {
           return true;
         }
       case "reset":
@@ -103,7 +104,7 @@ const UserTable = ({ data }) => {
 
   const handleTableMode = (mode, amountSelected) => {
     setAmountSelected(0);
-    setUpdateUser(null);
+    setUserToUpdate(null);
     setDeleteList([]);
     switch (mode) {
       case "generate":
