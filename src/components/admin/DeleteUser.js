@@ -1,6 +1,4 @@
 import React, { useEffect, useContext, useState } from "react";
-import { getRandomPassword } from "../../utils/passnounlist";
-import * as parsers from "../../utils/database/numberParsers";
 
 import { Text } from "@chakra-ui/react";
 
@@ -15,7 +13,6 @@ const DeleteUser = ({ buttonKeyword, account, onClose }) => {
   const { setFormIsValid, formIsValid } = useContext(UserFormContext);
   const { deleteList } = useContext(AdminContext);
 
-  const [currentDelete, setCurrentDelete] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
   async function deleteUserFromList(id) {
