@@ -102,10 +102,10 @@ const SchoolPanel = () => {
           mb={3}
           placeholder="Select School"
           onChange={(e) => {
-            isLoaded && 
-            setCurrentSchool(
-              schoolList.filter((school) => e.target.value === school.id)[0]
-            );
+            isLoaded &&
+              setCurrentSchool(
+                schoolList.filter((school) => e.target.value === school.id)[0]
+              );
           }}
           maxW={300}
         >
@@ -147,6 +147,10 @@ const SchoolPanel = () => {
                   Updated On:
                 </Text>
                 <Text color="blue">{currentSchool.updatedAt}</Text>
+                <Text mt={2} fontStyle={"italic"}>
+                  ID:
+                </Text>
+                <Text color="blue">{currentSchool.id}</Text>
               </Flex>
             </Container>
           </Container>
