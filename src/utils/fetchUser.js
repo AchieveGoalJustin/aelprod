@@ -2,9 +2,18 @@
 //finally returning the data as an object
 
 import { API, graphqlOperation } from "aws-amplify";
-import { listAccounts, listSchools, listUsers } from "../graphql/queries";
+import {
+  listAccounts,
+  listSchools,
+  listUsers,
+  getUser,
+  getAccount,
+} from "../graphql/queries";
 
 const fetchUser = async (inputData) => {
+  let accountUsers = { error: "data not retrieved" };
+  let nextTokenList = {};
+  let message = "not evaluated";
   let authData = {};
 
   //Fetch All Schools
@@ -53,9 +62,30 @@ const fetchUser = async (inputData) => {
     variables: { filter: { accountUsersId: { eq: filteredAcct[0].id } } },
   });
 
+  accountUsers = await API.graphql({
+    query: getAccount,
+    variables: { id: filteredAcct[0].id },
+  });
+
+  if (
+    userList.data.listUsers.nextToken &&
+    userList.data.listUsers.items.length === 0
+  ) {
+    nextTokenList = await API.graphql({
+      query: listUsers,
+      variables: {
+        nextToken: userList.data.listUsers.nextToken,
+        filter: { accountUsersId: { eq: filteredAcct[0].id } },
+      },
+    });
+    message = "NextToken, no length";
+  } else {
+    message = "No nextToken";
+  }
+
   //Filter users and return error if data provided is invalid
 
-  const filteredUser = userList.data.listUsers.items.filter(
+  const filteredUser = accountUsers.data.getAccount.users.items.filter(
     (user) =>
       user.username === inputData.username &&
       user.password === inputData.password
@@ -65,6 +95,28 @@ const fetchUser = async (inputData) => {
     authData = {
       error: "入力されたユーザー名、またはパスワードが間違っています。",
       code: 3,
+      data: {
+        userList,
+        accountList,
+        schoolList,
+        filteredAcct,
+        message,
+        nextTokenList,
+        accountUsers: accountUsers.data.getAccount.users.items,
+        filteredUser,
+        filteredSchool,
+        filteredSchoolNo: filteredSchool[0].number,
+        filteredAcctNo: filteredAcct[0].number,
+        filteredUserNo: filteredUser[0].number,
+        perm: filteredAcct[0].permissions,
+        id:
+          filteredSchool[0].number +
+          "-" +
+          filteredAcct[0].number +
+          "-" +
+          filteredUser[0].number,
+        username: filteredUser[0].username,
+      },
     };
     return authData;
   }

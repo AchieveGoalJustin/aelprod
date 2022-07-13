@@ -36,11 +36,17 @@ const AcctPanel = () => {
   // const [retrieveUsers, setRetrieveUsers] = useState(false);
 
   const getUserData = async () => {
-    const userData = await API.graphql(graphqlOperation(listUsers));
+    const userData = await API.graphql(
+      graphqlOperation(listUsers, {
+        limit: 5000,
+        filter: { accountUsersId: { eq: accountId } },
+      })
+    );
     const filtered = filterUsers(userData.data.listUsers.items, accountId);
     if (filtered) {
       setUserListIsLoaded(true);
     }
+    console.log(userData);
     setUserList(filtered);
   };
 

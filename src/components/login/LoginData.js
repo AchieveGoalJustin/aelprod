@@ -49,6 +49,7 @@ const LoginData = ({ auth }) => {
 
   const authenticate = async (credentials) => {
     const authStatus = await fetchUser(credentials);
+    setAuthStatusState(authStatus);
 
     if (!authStatus.error && Object.keys(authStatus).length !== 0) {
       const user = {
@@ -91,6 +92,7 @@ const LoginData = ({ auth }) => {
   const [buttonEnabled, setButtonEnabled] = useState(auth);
   const [errorCode, setErrorCode] = useState(0);
   const [userPerm, setUserPerm] = useState("");
+  const [authStatusState, setAuthStatusState] = useState();
 
   const successToast = useToast();
   const failToast = useToast();
@@ -115,6 +117,11 @@ const LoginData = ({ auth }) => {
   useEffect(() => {
     errorCode !== 0 && console.log("Error thrown with error code: ", errorCode);
   }, [errorCode]);
+
+  useEffect(() => {
+    console.log("authStatusState");
+    console.log(authStatusState);
+  }, [authStatusState]);
 
   return (
     <VStack background="white" px={4} py={5} borderRadius="md">
