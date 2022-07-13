@@ -5,12 +5,16 @@ export const course = {
   tnurl: null,
   theme: "orange",
   coursename: "英検®5級絶対合格講座",
-  courseSub: "",
+  courseSub: "予習必須！全問題形式に対応したコースで、絶対合格！",
   courseMetaTest: "英検",
   courseTest: "英検5級",
   videoNo: "20",
-  courseShortDesc: "",
-  courseLongDesc: ["", "", ""],
+  courseShortDesc:
+    "５きゅうが はじめて うける しけん というひとにも あんしん！しけんの ながれや もちものまで しょうかいします。",
+  courseLongDesc: [
+    "ごうかくに ひつような えいごの きそは、どうしや めいしなどの 「ひんし」や、ひていぶんや ぎもんしなどの「ぶんぽう」です。",
+    "いきなり えいごの ひんしや ぶんぽうを べんきょう するのではなく、にほんごの ひんしや ぶんぽうと むすびつけて せつめい するので おたのしみに！",
+  ],
   courseSections: {
     sectionOne: "コースの紹介",
     sectionTwo: "筆記セクション",
@@ -22,16 +26,16 @@ export const course = {
     {
       text: "コースの特徴",
       items: [
-        { icon: "check", text: "" },
-        { icon: "check", text: "" },
-        { icon: "check", text: "" },
+        { icon: "check", text: "ぶんぽうの きそを かいせつ！" },
+        { icon: "check", text: "すべての けいしきを れんしゅう！" },
+        { icon: "check", text: "べんきょうの しかたも しょうかい！" },
       ],
     },
     {
       text: "コースの注意点",
       items: [
-        { icon: "warning", text: "" },
-        { icon: "warning", text: "" },
+        { icon: "warning", text: "ぜんぶで 20レッスンです。" },
+        { icon: "warning", text: "よしゅうが ひつようです。" },
       ],
     },
   ],

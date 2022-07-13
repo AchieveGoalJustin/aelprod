@@ -50,7 +50,10 @@ const fetchUser = async (inputData) => {
 
   const userList = await API.graphql({
     query: listUsers,
-    variables: { filter: { accountUsersId: { eq: filteredAcct[0].id } } },
+    variables: {
+      filter: { accountUsersId: { eq: filteredAcct[0].id } },
+      limit: 5000,
+    },
   });
 
   //Filter users and return error if data provided is invalid
