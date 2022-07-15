@@ -5,7 +5,7 @@ export const course = {
   tnurl: null,
   theme: "orange",
   coursename: "英検®5級絶対合格講座",
-  courseSub: "予習必須！全問題形式に対応したコースで、絶対合格！",
+  courseSub: "予習必須！全問題形式に対応したコースで、一発合格を目指そう！",
   courseMetaTest: "英検",
   courseTest: "英検5級",
   videoNo: "20",
