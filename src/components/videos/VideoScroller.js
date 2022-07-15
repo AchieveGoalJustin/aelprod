@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import VideoPlayer from "./VideoPlayer";
 
 import VideoContext from "../../context/VideoContext";
@@ -21,6 +21,16 @@ const VideoScroller = () => {
   const handleRight = () => {
     setCurrentVideo(videoList[parseInt(currentVideo.day)]);
   };
+
+  useEffect(() => {
+    console.log(
+      `${process.env.NEXT_PUBLIC_EK3_ROOT}${
+        courseVideoList[Object.keys(courseVideoList)[0]].slug
+      }/${courseVideoList[Object.keys(courseVideoList)[0]].testid}D${
+        video.day
+      }.mp4`
+    );
+  });
 
   return (
     <Flex w={"100%"}>
