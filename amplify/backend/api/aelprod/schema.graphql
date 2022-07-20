@@ -4,6 +4,8 @@ input AMPLIFY {
   globalAuthRule: AuthRule = { allow: public }
 } # FOR TESTING ONLY!
 #School Data Types
+
+
 type School @model {
   number: String! #4-digit number
   name: String!
@@ -25,4 +27,5 @@ type User @model {
   username: String!
   password: String!
   account: Account @belongsTo
+  loginHistory: [String]
 }

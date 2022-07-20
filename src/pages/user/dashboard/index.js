@@ -15,6 +15,7 @@ import VideoContext from "../../../context/VideoContext";
 import SessionContext from "../../../context/SessionContext";
 
 //Utils
+import {parseVideoViewData} from "../../../utils/parseVideoViewData"
 import datacollator from "../../../utils/datacollator";
 import dataParser from "../../../utils/parseCourseData";
 import jwt from "jsonwebtoken";
@@ -64,6 +65,7 @@ const userDashboard = ({ perm, username }) => {
 
   // On Render
   useEffect(() => {
+    parseVideoViewData(fullData)
     if (!isLogged || !loaded) {
       courseList.error && setCourseList(parsedCourseList);
       currentCourse.error && setCurrentCourse(parsedCourseList[0]);
