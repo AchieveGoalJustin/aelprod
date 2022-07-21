@@ -30,7 +30,6 @@ const AcctPanel = () => {
     setRetrieveUsers,
   } = useContext(AdminContext);
 
-  const [allAccounts, setAllAccounts] = useState([]);
   const [filteredAccounts, setFilteredAccounts] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   // const [retrieveUsers, setRetrieveUsers] = useState(false);
@@ -51,19 +50,21 @@ const AcctPanel = () => {
   };
 
   const getAccountData = async () => {
-    const data = await API.graphql(graphqlOperation(listAccounts));
-    const filtered = filterAccounts(data.data.listAccounts.items, schoolId);
-    setAllAccounts(data.data.listAccounts.items);
+    const data = await API.graphql({
+      query: listAccounts,
+      variables: {
+        filter: { schoolAccountsId: { eq: schoolId } },
+        limit: 5000,
+      },
+    });
 
-    filtered.forEach((item) => {
+    const extracted = data.data.listAccounts.items
+
+    extracted.forEach((item) => {
       delete item.users;
     });
-    setFilteredAccounts(filtered);
+    setFilteredAccounts(extracted);
     setIsLoaded(true);
-  };
-
-  const filterAccounts = (accounts, id) => {
-    return accounts.filter((account) => account.schoolAccountsId === id);
   };
 
   const filterUsers = (users, id) => {
@@ -101,6 +102,9 @@ const AcctPanel = () => {
     }
   }, [retrieveUsers]);
 
+  useEffect(() => {
+    console.log(filteredAccounts);
+  });
   return (
     <Box p={5} boxShadow={"md"} bgColor="white" w="100%">
       <Heading>Accounts</Heading>
