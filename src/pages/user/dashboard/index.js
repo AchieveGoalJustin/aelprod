@@ -15,7 +15,8 @@ import VideoContext from "../../../context/VideoContext";
 import SessionContext from "../../../context/SessionContext";
 
 //Utils
-import {parseVideoViewData} from "../../../utils/parseVideoViewData"
+import { handleLoginHistory } from "../../../utils/loginHistoryHandler";
+import { parseVideoViewData } from "../../../utils/parseVideoViewData";
 import datacollator from "../../../utils/datacollator";
 import dataParser from "../../../utils/parseCourseData";
 import jwt from "jsonwebtoken";
@@ -31,7 +32,7 @@ import VideoDescriptionBox from "../../../components/dashboard/VideoDescriptionB
 import ContentSegment from "../../../components/structure/ContentSegment";
 import CourseDescriptionBox from "../../../components/dashboard/CourseDescriptionBox";
 
-const userDashboard = ({ perm, username }) => {
+const userDashboard = ({ perm, username, userId }) => {
   //Parsing data to be consumed by context
   const fullData = datacollator();
 
@@ -62,10 +63,15 @@ const userDashboard = ({ perm, username }) => {
 
   //State
   const [loaded, setLoaded] = useState(false);
+  //Delete after full implementation
+  const [loginHistory, setLoginHistory] = useState({});
 
   // On Render
   useEffect(() => {
-    parseVideoViewData(fullData)
+    // setUserId();
+    const fetchedLogin = handleLoginHistory(userId);
+    setLoginHistory(fetchedLogin);
+    parseVideoViewData(fullData);
     if (!isLogged || !loaded) {
       courseList.error && setCourseList(parsedCourseList);
       currentCourse.error && setCurrentCourse(parsedCourseList[0]);
@@ -81,6 +87,13 @@ const userDashboard = ({ perm, username }) => {
       // });
     }
   }, []);
+
+  useEffect(() => {
+    console.log("userId:");
+    console.log(userId);
+    console.log("login history:");
+    console.log(loginHistory);
+  }, [loginHistory]);
 
   return (
     <>
@@ -132,11 +145,13 @@ export const getServerSideProps = requireAuthentication(async (context) => {
   const user = context.req.cookies.AELJWT;
   let perm = [];
   let username = "";
+  let userId = "";
   if (user) {
     const decUser = jwt.decode(user);
     if (decUser.courses.length > 0) {
       perm = decUser.courses;
       username = decUser.username;
+      userId = decUser.id;
     } else {
       perm = "No available courses";
     }
@@ -146,6 +161,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     props: {
       username: username,
       perm: perm,
+      userId: userId,
     },
   };
 });

@@ -78,12 +78,7 @@ const fetchUser = async (inputData) => {
 
   authData = {
     username: filteredUser[0].username,
-    id:
-      filteredSchool[0].number +
-      "-" +
-      filteredAcct[0].number +
-      "-" +
-      filteredUser[0].number,
+    id: filteredUser[0].id,
     perm: filteredAcct[0].permissions,
   };
 
