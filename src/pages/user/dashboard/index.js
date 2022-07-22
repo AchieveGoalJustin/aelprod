@@ -32,7 +32,7 @@ import VideoDescriptionBox from "../../../components/dashboard/VideoDescriptionB
 import ContentSegment from "../../../components/structure/ContentSegment";
 import CourseDescriptionBox from "../../../components/dashboard/CourseDescriptionBox";
 
-const userDashboard = ({ perm, username, userId }) => {
+const userDashboard = ({ perm, username, currentUserId }) => {
   //Parsing data to be consumed by context
   const fullData = datacollator();
 
@@ -47,7 +47,7 @@ const userDashboard = ({ perm, username, userId }) => {
   const { setCurrentCourse, setCourseList, currentCourse, courseList } =
     useContext(CourseContext);
 
-  const { isLogged, setIsLogged } = useContext(SessionContext);
+  const { isLogged, setIsLogged, setUserId } = useContext(SessionContext);
 
   const {
     setCurrentVideo,
@@ -63,14 +63,10 @@ const userDashboard = ({ perm, username, userId }) => {
 
   //State
   const [loaded, setLoaded] = useState(false);
-  //Delete after full implementation
-  const [loginHistory, setLoginHistory] = useState({});
 
   // On Render
   useEffect(() => {
-    // setUserId();
-    const fetchedLogin = handleLoginHistory(userId);
-    setLoginHistory(fetchedLogin);
+    setUserId(currentUserId);
     parseVideoViewData(fullData);
     if (!isLogged || !loaded) {
       courseList.error && setCourseList(parsedCourseList);
@@ -87,13 +83,6 @@ const userDashboard = ({ perm, username, userId }) => {
       // });
     }
   }, []);
-
-  useEffect(() => {
-    console.log("userId:");
-    console.log(userId);
-    console.log("login history:");
-    console.log(loginHistory);
-  }, [loginHistory]);
 
   return (
     <>
@@ -145,13 +134,13 @@ export const getServerSideProps = requireAuthentication(async (context) => {
   const user = context.req.cookies.AELJWT;
   let perm = [];
   let username = "";
-  let userId = "";
+  let currentUserId = "";
   if (user) {
     const decUser = jwt.decode(user);
     if (decUser.courses.length > 0) {
       perm = decUser.courses;
       username = decUser.username;
-      userId = decUser.id;
+      currentUserId = decUser.id;
     } else {
       perm = "No available courses";
     }
@@ -161,7 +150,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     props: {
       username: username,
       perm: perm,
-      userId: userId,
+      currentUserId: currentUserId,
     },
   };
 });

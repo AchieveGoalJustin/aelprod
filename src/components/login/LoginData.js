@@ -19,6 +19,7 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { sign } from "jsonwebtoken";
 import cookie from "js-cookie";
 
+import { handleLoginHistory } from "../../utils/loginHistoryHandler";
 import fetchUser from "../../utils/fetchUser";
 
 import _ from "lodash";
@@ -28,6 +29,18 @@ import { useRouter } from "next/router";
 
 const LoginData = ({ auth }) => {
   const secret = process.env.NEXT_PUBLIC_AUTH_SK;
+
+  const router = useRouter();
+  const [school, setSchool] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [account, setAccount] = useState("");
+  const [authComplete, setAuthComplete] = useState(false);
+  const [show, setShow] = useState(false);
+  const [buttonEnabled, setButtonEnabled] = useState(auth);
+  const [errorCode, setErrorCode] = useState(0);
+  const [userPerm, setUserPerm] = useState("");
+  const [userId, setUserId] = useState("");
 
   const signToken = (user) => {
     const token = sign(
@@ -53,6 +66,8 @@ const LoginData = ({ auth }) => {
         perm: authStatus.perm,
       };
 
+      setUserId(user.id);
+
       const token = signToken(user);
 
       cookie.set("AELJWT", token, { expires: 3 / 24 });
@@ -76,17 +91,6 @@ const LoginData = ({ auth }) => {
       setErrorCode(authStatus.code);
     }
   };
-
-  const router = useRouter();
-  const [school, setSchool] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [account, setAccount] = useState("");
-  const [authComplete, setAuthComplete] = useState(false);
-  const [show, setShow] = useState(false);
-  const [buttonEnabled, setButtonEnabled] = useState(auth);
-  const [errorCode, setErrorCode] = useState(0);
-  const [userPerm, setUserPerm] = useState("");
 
   const successToast = useToast();
   const failToast = useToast();
@@ -112,6 +116,13 @@ const LoginData = ({ auth }) => {
   useEffect(() => {
     errorCode !== 0 && console.log("Error thrown with error code: ", errorCode);
   }, [errorCode]);
+
+  useEffect(() => {
+    (async () => {
+      const fetchedLogin = await handleLoginHistory(userId);
+      localStorage.setItem("loginHistory", JSON.stringify(fetchedLogin));
+    })();
+  }, [userId]);
 
   return (
     <VStack background="white" px={4} py={5} borderRadius="md">

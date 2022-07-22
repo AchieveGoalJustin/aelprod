@@ -56,12 +56,23 @@ export const getAccount = /* GraphQL */ `
           number
           username
           password
+          loginHistory
           id
           createdAt
           updatedAt
           accountUsersId
         }
         nextToken
+      }
+      school {
+        number
+        name
+        accounts {
+          nextToken
+        }
+        id
+        createdAt
+        updatedAt
       }
       id
       createdAt
@@ -84,6 +95,13 @@ export const listAccounts = /* GraphQL */ `
         users {
           nextToken
         }
+        school {
+          number
+          name
+          id
+          createdAt
+          updatedAt
+        }
         id
         createdAt
         updatedAt
@@ -99,6 +117,26 @@ export const getUser = /* GraphQL */ `
       number
       username
       password
+      account {
+        number
+        permissions
+        usercount
+        users {
+          nextToken
+        }
+        school {
+          number
+          name
+          id
+          createdAt
+          updatedAt
+        }
+        id
+        createdAt
+        updatedAt
+        schoolAccountsId
+      }
+      loginHistory
       id
       createdAt
       updatedAt
@@ -117,6 +155,16 @@ export const listUsers = /* GraphQL */ `
         number
         username
         password
+        account {
+          number
+          permissions
+          usercount
+          id
+          createdAt
+          updatedAt
+          schoolAccountsId
+        }
+        loginHistory
         id
         createdAt
         updatedAt

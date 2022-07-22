@@ -81,12 +81,23 @@ export const onCreateAccount = /* GraphQL */ `
           number
           username
           password
+          loginHistory
           id
           createdAt
           updatedAt
           accountUsersId
         }
         nextToken
+      }
+      school {
+        number
+        name
+        accounts {
+          nextToken
+        }
+        id
+        createdAt
+        updatedAt
       }
       id
       createdAt
@@ -106,12 +117,23 @@ export const onUpdateAccount = /* GraphQL */ `
           number
           username
           password
+          loginHistory
           id
           createdAt
           updatedAt
           accountUsersId
         }
         nextToken
+      }
+      school {
+        number
+        name
+        accounts {
+          nextToken
+        }
+        id
+        createdAt
+        updatedAt
       }
       id
       createdAt
@@ -131,12 +153,23 @@ export const onDeleteAccount = /* GraphQL */ `
           number
           username
           password
+          loginHistory
           id
           createdAt
           updatedAt
           accountUsersId
         }
         nextToken
+      }
+      school {
+        number
+        name
+        accounts {
+          nextToken
+        }
+        id
+        createdAt
+        updatedAt
       }
       id
       createdAt
@@ -151,6 +184,26 @@ export const onCreateUser = /* GraphQL */ `
       number
       username
       password
+      account {
+        number
+        permissions
+        usercount
+        users {
+          nextToken
+        }
+        school {
+          number
+          name
+          id
+          createdAt
+          updatedAt
+        }
+        id
+        createdAt
+        updatedAt
+        schoolAccountsId
+      }
+      loginHistory
       id
       createdAt
       updatedAt
@@ -164,6 +217,26 @@ export const onUpdateUser = /* GraphQL */ `
       number
       username
       password
+      account {
+        number
+        permissions
+        usercount
+        users {
+          nextToken
+        }
+        school {
+          number
+          name
+          id
+          createdAt
+          updatedAt
+        }
+        id
+        createdAt
+        updatedAt
+        schoolAccountsId
+      }
+      loginHistory
       id
       createdAt
       updatedAt
@@ -177,6 +250,26 @@ export const onDeleteUser = /* GraphQL */ `
       number
       username
       password
+      account {
+        number
+        permissions
+        usercount
+        users {
+          nextToken
+        }
+        school {
+          number
+          name
+          id
+          createdAt
+          updatedAt
+        }
+        id
+        createdAt
+        updatedAt
+        schoolAccountsId
+      }
+      loginHistory
       id
       createdAt
       updatedAt
