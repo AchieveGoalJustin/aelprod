@@ -19,7 +19,6 @@ import PaginateButtons from "./PaginateButtons";
 import TablePage from "./TablePage";
 
 const LoginHistory = () => {
-  const [debugData, setDebugData] = useState({});
   const [loginHistory, setLoginHistory] = useState([]);
   const [isPaginated, setIsPaginated] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -30,17 +29,23 @@ const LoginHistory = () => {
 
     if (history.length > 7) {
       pageCount = Math.ceil(history.length / 7);
-      setDebugData((debugData) => ({ ...debugData, pageCount: pageCount }));
       for (let i = 0; i < pageCount; i++) {
+        if (i === pageCount - 1) {
+          if (history.length < 7) {
+            let fillAmt = 7 - history.length;
+            let fillArray = [...history];
+            for (let i = 0; i < fillAmt; i++) {
+              fillArray.push(0);
+            }
+            paginatedArray.push(fillArray);
+          }
+          setLoginHistory(paginatedArray);
+          continue;
+        }
         let pushArray = history.splice(0, 7);
-        setDebugData((debugData) => ({ ...debugData, pushArray: pushArray }));
         paginatedArray.push(pushArray);
       }
       setIsPaginated(true);
-      setDebugData((debugData) => ({
-        ...debugData,
-        paginatedArray: paginatedArray,
-      }));
       setLoginHistory(paginatedArray);
     } else {
       setIsPaginated(false);
@@ -59,11 +64,6 @@ const LoginHistory = () => {
 
     paginateHistory(parsedLoginHistory);
   }, []);
-
-  useEffect(() => {
-    console.log("debug Data:");
-    console.log(debugData);
-  }, [debugData]);
 
   return (
     <Container maxW={"800px"} p={4} boxShadow={"md"} bg={"white"}>
@@ -89,7 +89,6 @@ const LoginHistory = () => {
           />
         )}
       </Box>
-      <Box>{JSON.stringify(debugData)}</Box>
     </Container>
   );
 };

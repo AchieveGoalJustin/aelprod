@@ -7,28 +7,24 @@ const PaginateButtons = ({ loginHistory, currentPage, setCurrentPage }) => {
   const [isLastPage, setIsLastPage] = useState(false);
 
   function handlePageDown() {
-    console.log("page down");
     if (currentPage !== 0) {
-      setCurrentPage(currentPage--);
+      setCurrentPage(--currentPage);
     }
   }
 
   function handlePageUp() {
-    console.log("page up");
-    if (currentPage !== loginHistory.length) {
-      setCurrentPage(currentPage++);
+    if (currentPage < loginHistory.length - 1) {
+      setCurrentPage(++currentPage);
     }
   }
 
   useEffect(() => {
-    console.log(loginHistory.length);
-    console.log(currentPage);
     if (currentPage === 0) {
       setIsFirstpage(true);
       setIsLastPage(false);
-    } else if (currentPage === loginHistory.length) {
+    } else if (currentPage === loginHistory.length - 1) {
       setIsLastPage(true);
-      setIsFirstpage(true);
+      setIsFirstpage(false);
     } else {
       setIsFirstpage(false);
       setIsLastPage(false);

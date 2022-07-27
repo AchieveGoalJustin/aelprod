@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Tbody, Tr, Td } from "@chakra-ui/react";
+import { Tbody, Tr, Td, Box } from "@chakra-ui/react";
 
 const TablePage = ({ pageData }) => {
   function formatDate(number) {
@@ -24,18 +24,30 @@ const TablePage = ({ pageData }) => {
 
   return (
     <Tbody>
-      {pageData?.map((item) => {
-        return (
-          <Tr key={item}>
-            <Td>{formatDate(new Date(item).getDay())}</Td>
-            <Td>
-              {new Date(item).getMonth() + 1}月{new Date(item).getDate()}日
-            </Td>
-            <Td>
-              {new Date(item).getHours()}:{new Date(item).getMinutes()}
-            </Td>
-          </Tr>
-        );
+      {pageData?.map((item, i) => {
+        if (item !== 0) {
+          return (
+            <Tr key={item}>
+              <Td>{formatDate(new Date(item).getDay())}</Td>
+              <Td>
+                {new Date(item).getMonth() + 1}月{new Date(item).getDate()}日
+              </Td>
+              <Td>
+                {new Date(item).getHours()}:{new Date(item).getMinutes()}
+              </Td>
+            </Tr>
+          );
+        } else {
+          return (
+            <Tr key={i}>
+              <Td>
+                <Box h={15} />
+              </Td>
+              <Td></Td>
+              <Td></Td>
+            </Tr>
+          );
+        }
       })}
     </Tbody>
   );
