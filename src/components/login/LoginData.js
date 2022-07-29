@@ -118,10 +118,12 @@ const LoginData = ({ auth }) => {
   }, [errorCode]);
 
   useEffect(() => {
-    (async () => {
-      const fetchedLogin = await handleLoginHistory(userId);
-      localStorage.setItem("loginHistory", JSON.stringify(fetchedLogin));
-    })();
+    if (userId) {
+      (async () => {
+        const fetchedLogin = await handleLoginHistory(userId);
+        localStorage.setItem("loginHistory", JSON.stringify(fetchedLogin));
+      })();
+    }
   }, [userId]);
 
   return (
