@@ -65,6 +65,10 @@ const LoginHistory = () => {
     paginateHistory(parsedLoginHistory);
   }, []);
 
+  useEffect(() => {
+    console.log(loginHistory);
+  }, [loginHistory]);
+
   return (
     <Container maxW={"800px"} p={4} boxShadow={"md"} bg={"white"}>
       <Heading my={2}>ログイン履歴</Heading>

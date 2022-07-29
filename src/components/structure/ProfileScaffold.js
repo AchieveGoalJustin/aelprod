@@ -1,6 +1,8 @@
 import React from "react";
 
-import { Box, Grid, GridItem } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Text, Flex, Spacer } from "@chakra-ui/react";
+
+import { ChevronRightIcon } from "@chakra-ui/icons";
 
 const ProfileScaffold = ({ children }) => {
   return (
@@ -18,7 +20,13 @@ const ProfileScaffold = ({ children }) => {
         overflow="hidden"
       >
         <GridItem height="100%" bgColor={"blue.400"} maxW={"200px"}>
-          <Box>//Profile nav</Box>
+          <Box mt={5} mx={3} px={4} bgColor="blue.100" boxShadow={"md"}>
+            <Flex alignItems={"center"}>
+              <Text>ログイン履歴</Text>
+              <Spacer />
+              <ChevronRightIcon w={8} h={8} />
+            </Flex>
+          </Box>
         </GridItem>
         <GridItem>
           <Box height="80vh" overflow="auto" grow={1} m={5}>
