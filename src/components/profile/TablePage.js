@@ -2,6 +2,14 @@ import React from "react";
 
 import { Tbody, Tr, Td, Box } from "@chakra-ui/react";
 
+function handleTime(time) {
+  if (time <= 9) {
+    return `0${time}`;
+  } else {
+    return time;
+  }
+}
+
 const TablePage = ({ pageData }) => {
   function formatDate(number) {
     switch (number) {
@@ -33,7 +41,8 @@ const TablePage = ({ pageData }) => {
                 {new Date(item).getMonth() + 1}月{new Date(item).getDate()}日
               </Td>
               <Td>
-                {new Date(item).getHours()}:{new Date(item).getMinutes()}
+                {new Date(item).getHours()}:
+                {handleTime(new Date(item).getMinutes())}
               </Td>
             </Tr>
           );
