@@ -38,9 +38,9 @@ const LoginHistory = () => {
               fillArray.push(0);
             }
             paginatedArray.push(fillArray);
+            setLoginHistory(paginatedArray);
+            continue;
           }
-          setLoginHistory(paginatedArray);
-          continue;
         }
         let pushArray = history.splice(0, 7);
         paginatedArray.push(pushArray);
@@ -74,7 +74,7 @@ const LoginHistory = () => {
             <Tr>
               <Th>曜日</Th>
               <Th>日付</Th>
-              <Th>時間</Th>
+              <Th>時刻</Th>
             </Tr>
           </Thead>
           <TablePage pageData={loginHistory[currentPage]} />
