@@ -67,7 +67,7 @@ const userDashboard = ({ perm, username, currentUserId }) => {
   // On Render
   useEffect(() => {
     setUserId(currentUserId);
-    parseVideoViewData(fullData);
+    // parseVideoViewData(fullData);
     if (!isLogged || !loaded) {
       courseList.error && setCourseList(parsedCourseList);
       currentCourse.error && setCurrentCourse(parsedCourseList[0]);
